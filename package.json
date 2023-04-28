@@ -9,14 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@carbon/icons-react": "^11.18.0",
     "@types/node": "18.16.2",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
+    "dotenv": "^16.0.3",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
+    "grommet": "^2.32.0",
+    "jotai": "^2.0.4",
     "next": "13.3.1",
+    "node-fetch": "^3.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-toastify": "^9.1.2",
+    "styled-components": "^5.3.10",
+    "swr": "^2.1.5",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "prettier": "^2.8.8"
   }
 }
