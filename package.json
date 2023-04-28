@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@carbon/icons-react": "^11.18.0",
+    "@clerk/nextjs": "^4.16.4",
     "@types/node": "18.16.2",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
