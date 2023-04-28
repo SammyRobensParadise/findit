@@ -21,6 +21,7 @@
     "jotai": "^2.0.4",
     "next": "13.3.1",
     "node-fetch": "^3.3.1",
+    "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.2",
@@ -29,6 +30,9 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/carbon__icons-react": "^11.16.0",
+    "@types/nprogress": "^0.2.0",
+    "@types/styled-components": "^5.1.26",
     "dotenv-cli": "^7.2.1",
     "prettier": "^2.8.8"
   }
