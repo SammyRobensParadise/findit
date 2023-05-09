@@ -11,7 +11,7 @@
   "dependencies": {
     "@carbon/icons-react": "^11.18.0",
     "@clerk/nextjs": "^4.16.4",
-    "@types/node": "18.16.2",
+    "@prisma/client": "^4.13.0",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
     "dotenv": "^16.0.3",
@@ -26,14 +26,17 @@
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.2",
     "styled-components": "^5.3.10",
-    "swr": "^2.1.5",
-    "typescript": "5.0.4"
+    "swr": "^2.1.5"
   },
   "devDependencies": {
     "@types/carbon__icons-react": "^11.16.0",
+    "@types/node": "^20.1.1",
     "@types/nprogress": "^0.2.0",
     "@types/styled-components": "^5.1.26",
     "dotenv-cli": "^7.2.1",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "prisma": "^4.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   }
 }

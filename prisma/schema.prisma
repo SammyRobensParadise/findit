@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String    @db.VarChar(255)
+  description String?
+  published   Boolean   @default(true)
+  keywords    Keyword[]
+  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String?
+}
+
+model Keyword {
+  id     Int    @id @default(autoincrement())
+  name   String
+  Item   Item?  @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  itemId Int?
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String?
+  items        Item[]
+  firstName    String    @default("Player")
+  lastName     String    @default("One")
+  phoneNumber  String?
+  lastLoggedIn DateTime? @default(now()) @map(name: "last_logged_in")
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+  updatedAt    DateTime  @default(now()) @map(name: "updated_at")
+}
