@@ -1,6 +1,12 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { ClerkProvider, SignedIn, SignedOut, ClerkLoaded } from '@clerk/nextjs'
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  ClerkLoaded,
+  WithUser
+} from '@clerk/nextjs'
 import { Grommet } from 'grommet'
 import UserSignIn from '@/components/UserSignIn'
 import { useRouter } from 'next/router'

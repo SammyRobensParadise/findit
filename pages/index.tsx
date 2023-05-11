@@ -1,35 +1,50 @@
 import Head from 'next/head'
-import { clerkClient, getAuth, buildClerkProps } from '@clerk/nextjs/server'
-import { GetServerSideProps } from 'next'
-import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
-import serverRenderUser from '@/functions/server-render-user'
-import Page from '@/components/Page'
-import { Box, Text } from 'grommet'
-import SearchForm from '@/components/SearchForm'
+import { useRouter } from 'next/router'
+import { Box } from 'grommet'
+import { SignedOut, SignedIn } from '@clerk/nextjs'
+import React from 'react'
+import { useEffect } from 'react'
+import type { NextPage } from 'next'
+import UserSignIn from '../components/UserSignIn'
 
-export default function Home(props: { user: UserWithCollections }) {
-  const { user } = props
+const Home: NextPage = () => {
   return (
-    <>
-      <Head>
-        <title>Findit | Search</title>
-        <meta name="description" content="Findit Home Page, Search or Create" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Page user={user}>
-        <Box gap="medium">
-          <Text>Search</Text>
-          <SearchForm user={user} />
-        </Box>
-      </Page>
-    </>
+    <Box fill>
+      <SignedOut>
+        <UserSignIn />
+      </SignedOut>
+      <SignedIn>
+        <Suspense />
+      </SignedIn>
+    </Box>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { userId } = getAuth(ctx.req)
-  const user = userId ? await clerkClient.users.getUser(userId) : undefined
-  const clerkProps = buildClerkProps(ctx.req, { user }) as ClerkState
-  return serverRenderUser(clerkProps)
+const Suspense = () => {
+  const router = useRouter()
+  useEffect(() => {
+    router.push('/search')
+  }, [router])
+
+  return (
+    <div
+      style={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <Head>
+        <title>PharmaBox</title>
+        <meta
+          name="description"
+          content="Pharmabox Homepage. Login to continue"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+    </div>
+  )
 }
+export default Home

@@ -34,6 +34,7 @@
     "@types/node": "^20.1.1",
     "@types/nprogress": "^0.2.0",
     "@types/styled-components": "^5.1.26",
+    "buffer": "^6.0.3",
     "dotenv-cli": "^7.2.1",
     "prettier": "^2.8.8",
     "prisma": "^4.14.0",
