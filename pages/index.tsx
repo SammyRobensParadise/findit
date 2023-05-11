@@ -4,9 +4,10 @@ import { GetServerSideProps } from 'next'
 import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
+import { Text } from 'grommet'
 
 export default function Home(props: { user: UserWithCollections }) {
-  console.log(props.user)
+  const { user } = props
   return (
     <>
       <Head>
@@ -15,8 +16,8 @@ export default function Home(props: { user: UserWithCollections }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Page>
-        <p>home</p>
+      <Page user={user}>
+        <Text>Home</Text>
       </Page>
     </>
   )

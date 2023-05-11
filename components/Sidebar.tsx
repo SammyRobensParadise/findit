@@ -4,7 +4,11 @@ import Link from 'next/link'
 
 export default function Sidebar() {
   return (
-    <Box className="sidebar" color="white">
+    <Box
+      className="sidebar"
+      color="white"
+      border={{ side: 'right', color: 'dark-6' }}
+    >
       <Nav direction="column" pad="medium" background="neutral-2" fill>
         <Link href="/" passHref>
           <Anchor label="Home" color="white" icon={<Home size={24} />} />
