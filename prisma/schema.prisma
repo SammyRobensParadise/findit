@@ -11,32 +11,45 @@ datasource db {
 }
 
 model Item {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String    @db.VarChar(255)
-  description String?
-  published   Boolean   @default(true)
-  keywords    Keyword[]
-  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId      String?
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  name         String      @db.VarChar(255)
+  description  String?
+  published    Boolean     @default(true)
+  keywords     Keyword[]
+  userId       String?
+  Collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?
 }
 
 model Keyword {
-  id     Int    @id @default(autoincrement())
-  name   String
-  Item   Item?  @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  itemId Int?
+  id           Int         @id @default(autoincrement())
+  name         String
+  Item         Item?       @relation(fields: [itemId], references: [id])
+  itemId       Int?
+  Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  collectionId String?
+}
+
+model Collection {
+  id                 String    @id @default(uuid())
+  name               String
+  description        String?
+  items              Item[]
+  collectionKeywords Keyword[]
+  user               User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId             String?
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
+  id           String       @id @default(uuid())
+  email        String       @unique
   name         String?
-  items        Item[]
-  firstName    String    @default("Player")
-  lastName     String    @default("One")
-  lastLoggedIn DateTime? @default(now()) @map(name: "last_logged_in")
-  createdAt    DateTime  @default(now()) @map(name: "created_at")
-  updatedAt    DateTime  @default(now()) @map(name: "updated_at")
+  firstName    String       @default("Player")
+  lastName     String       @default("One")
+  lastLoggedIn DateTime?    @default(now()) @map(name: "last_logged_in")
+  createdAt    DateTime     @default(now()) @map(name: "created_at")
+  updatedAt    DateTime     @default(now()) @map(name: "updated_at")
+  collections  Collection[]
 }
