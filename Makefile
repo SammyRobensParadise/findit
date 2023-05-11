@@ -15,9 +15,7 @@ prisma:
 
 data:
 	@echo "Generating data..."
-	include .env.local
-	export
-	dotenv -e .env.local -- npx ts-node lib/scripts/seed-database.ts
+	bash/seed-database
 
 
 

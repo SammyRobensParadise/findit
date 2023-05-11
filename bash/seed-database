@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -o allexport
+source .env.local
+set +o allexport
+
+dotenv -e .env.local -- npx prisma migrate reset --force
+npx ts-node lib/scripts/seed-database.ts
