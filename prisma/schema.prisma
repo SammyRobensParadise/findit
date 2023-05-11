@@ -36,7 +36,6 @@ model User {
   items        Item[]
   firstName    String    @default("Player")
   lastName     String    @default("One")
-  phoneNumber  String?
   lastLoggedIn DateTime? @default(now()) @map(name: "last_logged_in")
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @default(now()) @map(name: "updated_at")
