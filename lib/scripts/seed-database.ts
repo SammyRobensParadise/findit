@@ -23,30 +23,43 @@ async function getUsers(): Promise<UserJSON[]> {
   return users
 }
 
+type Item = {
+  id: number
+  name: string
+  description: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+type Keyword = { name: string; itemId: number }
+
 async function getTestData() {
-  const items = await csv().fromFile(`${CSV_DATA_PATH}/Items.csv`)
-  const keywords = await csv().fromFile(`${CSV_DATA_PATH}/ItemKeyWords.csv`)
+  const items: Item[] = await csv().fromFile(`${CSV_DATA_PATH}/Items.csv`)
+  const keywords: Keyword[] = await csv().fromFile(
+    `${CSV_DATA_PATH}/ItemKeyWords.csv`
+  )
   return { items, keywords }
 }
 
 getUsers().then((users: UserJSON[]) => {
   console.info(clr, `Found ${users.length} Users`)
-  users.forEach(async (user: UserJSON) => {
-    const databaseUser: User = {
-      id: user.id,
-      name: `${user.first_name} ${user.last_name}`,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      email: user.email_addresses[0].email_address,
-      lastLoggedIn: new Date(user.last_sign_in_at),
-      createdAt: new Date(user.created_at),
-      updatedAt: new Date(user.updated_at)
-    }
-    const dbuser = await prisma.user.create({ data: { ...databaseUser } })
-    console.info(clr, 'Created User:')
-    console.table(dbuser)
-  })
-
+  Promise.all(
+    users.map(async (user: UserJSON) => {
+      const databaseUser: User = {
+        id: user.id,
+        name: `${user.first_name} ${user.last_name}`,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email_addresses[0].email_address,
+        lastLoggedIn: new Date(user.last_sign_in_at),
+        createdAt: new Date(user.created_at),
+        updatedAt: new Date(user.updated_at)
+      }
+      const dbuser = await prisma.user.create({ data: { ...databaseUser } })
+      console.info(clr, 'Created User:')
+      console.table(dbuser)
+    })
+  )
   getTestData().then(({ items, keywords }) => {
     console.info(
       clr,
