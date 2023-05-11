@@ -187,7 +187,9 @@ getUsers()
               userId: defaultUserId
             })
               .then((collection) => {
-                console.info(collection)
+                console.info(clr, 'Generated Collection:')
+                console.table(collection)
+                console.info(clr, 'DONE!')
               })
               .catch((error) => console.error(error))
           })

@@ -3,6 +3,7 @@
 set -o allexport
 source .env.local
 set +o allexport
-
+echo "reseting local database..."
 dotenv -e .env.local -- npx prisma migrate reset --force
+echo "seeding test data..."
 npx ts-node lib/scripts/seed-database.ts
