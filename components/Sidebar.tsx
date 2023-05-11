@@ -1,5 +1,5 @@
-import { Book, ChartAreaSmooth, Home } from '@carbon/icons-react'
-import { Anchor, Box, Nav } from 'grommet'
+import { Book, ChartAreaSmooth, Search } from '@carbon/icons-react'
+import { Anchor, Box, Button, Nav } from 'grommet'
 import Link from 'next/link'
 
 export default function Sidebar() {
@@ -11,16 +11,27 @@ export default function Sidebar() {
     >
       <Nav direction="column" pad="medium" background="neutral-2" fill>
         <Link href="/" passHref>
-          <Anchor label="Home" color="white" icon={<Home size={24} />} />
+          <Button
+            label="Search"
+            color="white"
+            icon={<Search size={24} />}
+            style={{ border: 0 }}
+          />
         </Link>
         <Link href="/collections" passHref>
-          <Anchor label="Collections" color="white" icon={<Book size={24} />} />
+          <Button
+            label="Collections"
+            color="white"
+            icon={<Book size={24} />}
+            style={{ border: 0 }}
+          />
         </Link>
         <Link href="/stats" passHref>
-          <Anchor
+          <Button
             label="Statistics"
             color="white"
             icon={<ChartAreaSmooth size={24} />}
+            style={{ border: 0 }}
           />
         </Link>
       </Nav>

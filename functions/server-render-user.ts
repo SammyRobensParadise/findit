@@ -8,7 +8,13 @@ export default async function serverRenderUser(state: ClerkState) {
       id: s.userId
     },
     include: {
-      collections: true
+      collections: {
+        select: {
+          name: true,
+          id: true,
+          description: true
+        }
+      }
     }
   })
   if (userWithCollections) {
