@@ -8,9 +8,12 @@ import {
   SelectMultiple,
   Box,
   Text,
-  Tag
+  Tag,
+  TextInput,
+  Button,
+  FormExtendedEvent
 } from 'grommet'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 
 export default function SearchForm({ user }: { user: UserWithCollections }) {
   const [collection, setCollection] = useState<Partial<Collection>>()
@@ -18,16 +21,33 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
     userId: user.id,
     collectionId: collection?.id
   })
-  const [valueMultiple, setValueMultiple] = useState<Keyword[]>([])
-  const [options, setOptions] = useState(keywords)
+  const [keywordsValues, setKeywordsValues] = useState<Keyword[]>([])
+  const [keywordsOptions, setKeywordOptions] = useState(keywords)
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
-    setOptions(keywords)
+    setKeywordOptions(keywords)
   }, [keywords])
 
-  // console.log(options)
+  function resetForm() {
+    setCollection(undefined)
+    setKeywordsValues([])
+    setKeywordOptions([])
+    setSearchTerm('')
+  }
+
+  async function Submit(
+    event: FormExtendedEvent<{
+      collection: Collection
+      keywords: Keyword[]
+      text: string
+    }>
+  ) {
+    const { value } = event
+  }
+
   return (
-    <Form>
+    <Form onReset={resetForm} onSubmit={Submit}>
       <FormField name="collection" label="Collection" htmlFor="collection">
         <Select
           options={user.collections}
@@ -40,32 +60,43 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
         <Box>
           <FormField name="keywords" label="Keywords" htmlFor="keywords">
             <Box pad="small" direction="row" gap="small">
-              {valueMultiple.map((value: Keyword) => (
-                <Tag
-                  size="small"
-                  name="Keyword"
-                  value={value.name}
-                  key={value.id}
-                />
+              {keywordsValues.map((value: Keyword) => (
+                <Box key={value.id} background="light-3" round>
+                  <Tag size="small" name="Keyword" value={value.name} />
+                </Box>
               ))}
             </Box>
             <SelectMultiple
+              name="keywords"
+              id="keywords"
               showSelectedInline
               size="medium"
               placeholder="Select multiple options"
-              value={valueMultiple}
-              options={options ?? []}
-              onChange={({ value: nextValue }) => setValueMultiple(nextValue)}
-              onClose={() => setOptions(keywords)}
+              value={keywordsValues}
+              options={keywordsOptions ?? []}
+              onChange={({ value: nextValue }) => setKeywordsValues(nextValue)}
+              onClose={() => setKeywordOptions(keywords)}
               onSearch={(text) => {
                 const escapedText = text.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
                 const exp = new RegExp(escapedText, 'i')
                 const newOptions = keywords?.filter((o) => exp.test(o.name))
-                console.log(newOptions)
-                setOptions(newOptions)
+                setKeywordOptions(newOptions)
               }}
             />
           </FormField>
+          <FormField name="text" label="Search Text" htmlFor="text">
+            <TextInput
+              name="text"
+              id="text"
+              placeholder="Search by text..."
+              value={searchTerm}
+              onChange={({ target: { value } }) => setSearchTerm(value)}
+            />
+          </FormField>
+          <Box direction="row" gap="medium">
+            <Button type="reset" label="Reset Form" />
+            <Button type="submit" primary label="Search" />
+          </Box>
         </Box>
       )}
     </Form>

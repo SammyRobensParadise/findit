@@ -5,22 +5,20 @@ import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
 import { Box, Text } from 'grommet'
-import SearchForm from '@/components/SearchForm'
 
-export default function Home(props: { user: UserWithCollections }) {
+export default function Results(props: { user: UserWithCollections }) {
   const { user } = props
   return (
     <>
       <Head>
-        <title>Findit | Search</title>
+        <title>Findit | Results</title>
         <meta name="description" content="Findit Home Page, Search or Create" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Page user={user}>
         <Box gap="medium">
-          <Text>Search</Text>
-          <SearchForm user={user} />
+          <Text>Results</Text>
         </Box>
       </Page>
     </>
