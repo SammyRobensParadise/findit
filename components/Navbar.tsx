@@ -6,7 +6,6 @@ import { useClerk } from '@clerk/clerk-react'
 export default function Navbar({ user }: { user: UserWithCollections }) {
   const { isLoaded, user: clerkUser } = useUser()
   const { signOut } = useClerk()
-  console.log(user)
   return (
     <Header
       pad="small"

@@ -10,7 +10,7 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
     userId: user.id,
     collectionId: collection?.id
   })
-  console.log(collection)
+  console.log(keywords)
   return (
     <Form>
       <FormField name="collection" label="Collection" htmlFor="collection">
@@ -21,6 +21,11 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
           onChange={({ value }) => setCollection(value)}
         />
       </FormField>
+      {keywords?.length && (
+        <FormField name="keywords" label="Keywords" htmlFor="keywords">
+          <Select options={keywords} name="keywords" id="keywords" multiple />
+        </FormField>
+      )}
     </Form>
   )
 }
