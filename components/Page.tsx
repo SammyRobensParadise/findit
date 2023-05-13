@@ -8,12 +8,12 @@ export default function Page({
   user
 }: PropsWithChildren<{ user: UserWithCollections }>) {
   return (
-    <Box direction="row" fill="vertical">
+    <Box direction="row" className="container" style={{ height: 'inherit' }}>
       <Sidebar />
-      <Box>
+      <Box flex>
         <Navbar user={user} />
-        <Box pad="medium" flex>
-          {children}
+        <Box flex overflow="scroll">
+          <Box pad="medium">{children}</Box>
         </Box>
       </Box>
     </Box>

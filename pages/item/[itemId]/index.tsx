@@ -13,6 +13,8 @@ import { Box, Button, Card, Tag, Text } from 'grommet'
 import { serverRenderItem } from '@/functions/server-render-item'
 import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
+import { Csv, Printer } from '@carbon/icons-react'
+import { CSVLink } from 'react-csv'
 
 export default function Results(props: {
   user: UserWithCollections
@@ -20,12 +22,19 @@ export default function Results(props: {
 }) {
   const { user, item } = props
 
-  console.log(item)
-
   const componentRef = useRef(null)
   const handlePrint = useReactToPrint({
     content: () => componentRef?.current
   })
+
+  const downloadableItem = {
+    name: item.name,
+    description: item.description,
+    id: item.id,
+    keywords: item.keywords.map((k) => k.name).toString(),
+    collection: item.Collection.name,
+    collectionId: item.Collection.id
+  }
 
   return (
     <>
@@ -36,53 +45,62 @@ export default function Results(props: {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Page user={user}>
-        <Box gap="medium" flex="grow">
-          <Card gap="medium" pad="medium" ref={componentRef}>
-            <Box gap="small">
-              <Text size="small">Name:</Text>
-              <Text weight="bold">{item.name}</Text>
-            </Box>
-            <Box gap="small">
-              <Text size="small">Description:</Text>
-              <Text>{item.description}</Text>
-            </Box>
-            <Box gap="small">
-              <Text size="small">Keywords:</Text>
-              <Box direction="row" gap="small">
-                {item.keywords?.map((word) => (
-                  <Tag
-                    key={word.id}
-                    value={word.name}
-                    name={`id ${word.id}`}
-                    size="small"
-                  />
-                ))}
+        <Box gap="medium" flex="grow" pad="small">
+          <Box direction="row" gap="medium" pad="small">
+            <Button
+              label="Print"
+              onClick={handlePrint}
+              icon={<Printer size={16} />}
+            />
+            <CSVLink data={[downloadableItem]} filename={`item-${item.id}.csv`}>
+              <Button label="Download CSV" icon={<Csv size={16} />} />
+            </CSVLink>
+          </Box>
+          <Card>
+            <Box gap="medium" pad="medium" ref={componentRef}>
+              <Box gap="small">
+                <Text size="small">Item Name:</Text>
+                <Text weight="bold">{item.name}</Text>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Description:</Text>
+                <Text>{item.description}</Text>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Keywords:</Text>
+                <Box direction="row" gap="small">
+                  {item.keywords?.map((word) => (
+                    <Tag
+                      key={word.id}
+                      value={word.name}
+                      name={`id ${word.id}`}
+                      size="small"
+                    />
+                  ))}
+                </Box>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Collection:</Text>
+                <Text>{item.Collection.name}</Text>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Last Updated:</Text>
+                <Text>
+                  {new Date(item.updatedAt).toLocaleDateString('en-US')}
+                </Text>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Created:</Text>
+                <Text>
+                  {new Date(item.updatedAt).toLocaleDateString('en-US')}
+                </Text>
+              </Box>
+              <Box gap="small">
+                <Text size="small">Item Number:</Text>
+                <Text>{item.id}</Text>
               </Box>
             </Box>
-            <Box gap="small">
-              <Text size="small">Collection:</Text>
-              <Text>{item.Collection.name}</Text>
-            </Box>
-            <Box gap="small">
-              <Text size="small">Last Updated:</Text>
-              <Text>
-                {new Date(item.updatedAt).toLocaleDateString('en-US')}
-              </Text>
-            </Box>
-            <Box gap="small">
-              <Text size="small">Created:</Text>
-              <Text>
-                {new Date(item.updatedAt).toLocaleDateString('en-US')}
-              </Text>
-            </Box>
-            <Box gap="small">
-              <Text size="small">Item Number:</Text>
-              <Text>{item.id}</Text>
-            </Box>
           </Card>
-          <Box direction="row" gap="medium" pad="small">
-            <Button label="print" onClick={handlePrint} />
-          </Box>
         </Box>
       </Page>
     </>
