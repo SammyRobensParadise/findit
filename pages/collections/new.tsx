@@ -6,28 +6,114 @@ import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
 import {
   Box,
-  Card,
-  Grid,
   Text,
-  ResponsiveContext,
-  CardHeader,
-  CardBody,
-  CardFooter,
   Button,
-  Anchor,
   Form,
   FormField,
   TextInput,
-  TextArea
+  TextArea,
+  Keyboard
 } from 'grommet'
-import { useContext, useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
-import { Add, Search } from '@carbon/icons-react'
+import { Close } from '@carbon/icons-react'
+
+const Tag = ({ children, onRemove, ...rest }: any) => {
+  const tag = (
+    <Box
+      direction="row"
+      align="center"
+      background="brand"
+      pad={{ horizontal: 'xsmall', vertical: 'xxsmall' }}
+      margin={{ vertical: 'xxsmall' }}
+      round="medium"
+      {...rest}
+    >
+      <Text size="xsmall" margin={{ right: 'xxsmall' }}>
+        {children}
+      </Text>
+      {onRemove && <Close size={16} />}
+    </Box>
+  )
+
+  if (onRemove) {
+    return <Button onClick={onRemove}>{tag}</Button>
+  }
+  return tag
+}
+
+const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
+  const [currentTag, setCurrentTag] = useState('')
+  const boxRef = useRef(null)
+
+  const updateCurrentTag = (event: any) => {
+    setCurrentTag(event.target.value)
+    if (onChange) {
+      onChange(event)
+    }
+  }
+
+  const onAddTag = (tag: string) => {
+    if (onAdd) {
+      onAdd(tag)
+    }
+  }
+
+  const onEnter = () => {
+    if (currentTag.length) {
+      onAddTag(currentTag)
+      setCurrentTag('')
+    }
+  }
+
+  const renderValue = () =>
+    value.map((v: any, index: number) => (
+      <Tag
+        margin="xxsmall"
+        key={`${v}${index + 0}`}
+        onRemove={() => onRemove(v)}
+      >
+        {v}
+      </Tag>
+    ))
+
+  return (
+    <Keyboard onEnter={onEnter}>
+      <Box direction="row" pad={{ horizontal: 'xsmall' }} ref={boxRef} wrap>
+        {value.length > 0 && renderValue()}
+        <Box flex>
+          <TextInput
+            plain
+            type="search"
+            dropTarget={boxRef.current}
+            {...rest}
+            onChange={updateCurrentTag}
+            value={currentTag}
+            onSuggestionSelect={(event) => onAddTag(event.suggestion)}
+          />
+        </Box>
+      </Box>
+    </Keyboard>
+  )
+}
 
 export default function NewCollection(props: { user: UserWithCollections }) {
   const [collectionName, setCollectionName] = useState<string>('')
   const [collectionDescription, setCollectionDescription] = useState<string>('')
   const { user } = props
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+
+  const onRemoveTag = (tag: string) => {
+    const removeIndex = selectedTags.indexOf(tag)
+    const newTags = [...selectedTags]
+    if (removeIndex >= 0) {
+      newTags.splice(removeIndex, 1)
+    }
+    setSelectedTags(newTags)
+  }
+
+  const onAddTag = (tag: string) => setSelectedTags([...selectedTags, tag])
 
   return (
     <>
@@ -69,6 +155,23 @@ export default function NewCollection(props: { user: UserWithCollections }) {
                   onChange={({ target: { value } }) =>
                     setCollectionDescription(value)
                   }
+                />
+              </FormField>
+              <FormField
+                name="user-emails"
+                label="Share via Email"
+                htmlFor="user-emails"
+                help={
+                  <Text size="small" color="dark-2">
+                    Type an email and press the <kbd>Enter</kbd> key
+                  </Text>
+                }
+              >
+                <TagInput
+                  placeholder="Enter email"
+                  value={selectedTags}
+                  onRemove={onRemoveTag}
+                  onAdd={onAddTag}
                 />
               </FormField>
             </Form>
