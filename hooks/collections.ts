@@ -1,4 +1,5 @@
 import { Collection } from '@prisma/client'
+import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
 const fetcher = <T>(...arg: [string, Record<string, any>]): Promise<T> =>
@@ -29,6 +30,12 @@ export function useCollections({ userId }: { userId: string }) {
     })
 
     const response = await res.json()
+
+    if (response.message === 'success') {
+      toast.success(`Created Collection ${response.collection.name}`)
+    } else {
+      toast.error('Unable to Create Collection')
+    }
     return response
   }
   return { collections: data?.collections, error, create }

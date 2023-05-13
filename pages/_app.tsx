@@ -14,6 +14,7 @@ import styled from 'styled-components'
 import { ToastContainer } from 'react-toastify'
 import NProgress from 'nprogress'
 import Router from 'next/router'
+import 'react-toastify/dist/ReactToastify.css'
 
 const publicPages = ['/sign-up', '/sign-in']
 
@@ -58,6 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
               </SignedOut>
             </>
           )}
+          <ToastContainer />
           <StyledContainer
             position="top-right"
             autoClose={5000}

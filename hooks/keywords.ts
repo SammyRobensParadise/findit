@@ -12,7 +12,7 @@ export function useKeywords({
   collectionId: string | undefined
 }) {
   const { data, error } = useSWR<{ message: string; keywords: Keyword[] }>(
-    `/api/${collectionId}/keywords?userId=${userId}`,
+    `/api/collections/${collectionId}/keywords?userId=${userId}`,
     fetcher,
     {
       revalidateIfStale: true,

@@ -18,6 +18,8 @@ import {
 import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { Close } from '@carbon/icons-react'
+import { useCollections } from '@/hooks/collections'
+import { useRouter } from 'next/router'
 
 const Tag = ({ children, onRemove, ...rest }: any) => {
   const tag = (
@@ -102,8 +104,10 @@ export default function NewCollection(props: { user: UserWithCollections }) {
   const [collectionName, setCollectionName] = useState<string>('')
   const [collectionDescription, setCollectionDescription] = useState<string>('')
   const { user } = props
+  const router = useRouter()
 
   const [selectedEmails, setSelectedEmails] = useState<string[]>([])
+  const { create } = useCollections({ userId: user.id })
 
   const onRemoveEmailTag = (tag: string) => {
     const removeIndex = selectedEmails.indexOf(tag)
@@ -118,6 +122,14 @@ export default function NewCollection(props: { user: UserWithCollections }) {
 
   async function handleSubmit() {
     console.log(selectedEmails)
+    const response = await create({
+      name: collectionName,
+      description: collectionDescription,
+      userEmails: selectedEmails
+    })
+    if (response.message === 'success') {
+      router.push('/collections')
+    }
   }
 
   return (
