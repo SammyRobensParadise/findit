@@ -12,7 +12,8 @@ import {
   FormField,
   TextInput,
   TextArea,
-  Keyboard
+  Keyboard,
+  FormExtendedEvent
 } from 'grommet'
 import { useRef, useState } from 'react'
 import Link from 'next/link'
@@ -23,7 +24,7 @@ const Tag = ({ children, onRemove, ...rest }: any) => {
     <Box
       direction="row"
       align="center"
-      background="brand"
+      background="neutral-3"
       pad={{ horizontal: 'xsmall', vertical: 'xxsmall' }}
       margin={{ vertical: 'xxsmall' }}
       round="medium"
@@ -59,7 +60,7 @@ const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
     }
   }
 
-  const onEnter = () => {
+  const onSpace = () => {
     if (currentTag.length) {
       onAddTag(currentTag)
       setCurrentTag('')
@@ -78,7 +79,7 @@ const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
     ))
 
   return (
-    <Keyboard onEnter={onEnter}>
+    <Keyboard onSpace={onSpace}>
       <Box direction="row" pad={{ horizontal: 'xsmall' }} ref={boxRef} wrap>
         {value.length > 0 && renderValue()}
         <Box flex>
@@ -102,18 +103,22 @@ export default function NewCollection(props: { user: UserWithCollections }) {
   const [collectionDescription, setCollectionDescription] = useState<string>('')
   const { user } = props
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([])
 
-  const onRemoveTag = (tag: string) => {
-    const removeIndex = selectedTags.indexOf(tag)
-    const newTags = [...selectedTags]
+  const onRemoveEmailTag = (tag: string) => {
+    const removeIndex = selectedEmails.indexOf(tag)
+    const newTags = [...selectedEmails]
     if (removeIndex >= 0) {
       newTags.splice(removeIndex, 1)
     }
-    setSelectedTags(newTags)
+    setSelectedEmails(newTags)
   }
+  const onAddEmailTag = (tag: string) =>
+    setSelectedEmails([...selectedEmails, tag])
 
-  const onAddTag = (tag: string) => setSelectedTags([...selectedTags, tag])
+  async function handleSubmit() {
+    console.log(selectedEmails)
+  }
 
   return (
     <>
@@ -127,53 +132,64 @@ export default function NewCollection(props: { user: UserWithCollections }) {
         <Box gap="medium">
           <Text>New Collection</Text>
           <Box>
-            <Form>
-              <FormField
-                name="name"
-                label="Collection Name (required)"
-                htmlFor="name"
-              >
-                <TextInput
-                  required
+            <Form onSubmit={handleSubmit}>
+              <Box gap="small">
+                <FormField
                   name="name"
-                  id="name"
-                  placeholder="My New Collection"
-                  value={collectionName}
-                  onChange={({ target: { value } }) => setCollectionName(value)}
-                />
-              </FormField>
-              <FormField
-                name="description"
-                label="Collection Description"
-                htmlFor="description"
-              >
-                <TextArea
+                  label="Collection Name (required)"
+                  htmlFor="name"
+                >
+                  <TextInput
+                    required
+                    name="name"
+                    id="name"
+                    placeholder="My New Collection"
+                    value={collectionName}
+                    onChange={({ target: { value } }) =>
+                      setCollectionName(value)
+                    }
+                  />
+                </FormField>
+                <FormField
                   name="description"
-                  id="description"
-                  placeholder="Description"
-                  value={collectionDescription}
-                  onChange={({ target: { value } }) =>
-                    setCollectionDescription(value)
+                  label="Collection Description"
+                  htmlFor="description"
+                >
+                  <TextArea
+                    name="description"
+                    id="description"
+                    placeholder="Description"
+                    value={collectionDescription}
+                    onChange={({ target: { value } }) =>
+                      setCollectionDescription(value)
+                    }
+                  />
+                </FormField>
+                <FormField
+                  name="user-emails"
+                  label="Share via Email"
+                  htmlFor="user-emails"
+                  help={
+                    <Text size="small" color="dark-2">
+                      Type an email and press the <kbd>Space</kbd> key
+                    </Text>
                   }
+                >
+                  <TagInput
+                    placeholder="Enter email"
+                    value={selectedEmails}
+                    onRemove={onRemoveEmailTag}
+                    onAdd={onAddEmailTag}
+                  />
+                </FormField>
+                <Button
+                  type="submit"
+                  label="Create Collection"
+                  primary
+                  disabled={!collectionName.length}
+                  color="neutral-2"
                 />
-              </FormField>
-              <FormField
-                name="user-emails"
-                label="Share via Email"
-                htmlFor="user-emails"
-                help={
-                  <Text size="small" color="dark-2">
-                    Type an email and press the <kbd>Enter</kbd> key
-                  </Text>
-                }
-              >
-                <TagInput
-                  placeholder="Enter email"
-                  value={selectedTags}
-                  onRemove={onRemoveTag}
-                  onAdd={onAddTag}
-                />
-              </FormField>
+              </Box>
             </Form>
           </Box>
         </Box>
