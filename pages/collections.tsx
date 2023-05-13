@@ -4,10 +4,25 @@ import { GetServerSideProps } from 'next'
 import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Text } from 'grommet'
+import {
+  Box,
+  Card,
+  Grid,
+  Text,
+  ResponsiveContext,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Button
+} from 'grommet'
+import { useContext } from 'react'
+import Link from 'next/link'
+import { Search } from '@carbon/icons-react'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
+  const size = useContext(ResponsiveContext)
+
   return (
     <>
       <Head>
@@ -18,7 +33,32 @@ export default function Collections(props: { user: UserWithCollections }) {
       </Head>
       <Page user={user}>
         <Box gap="medium">
-          <Text>Collections</Text>
+          <Text>Collections {`(${user.collections.length})`}</Text>
+          <Box>
+            <Grid columns={size !== 'small' ? 'small' : '100%'} gap="small">
+              {user.collections.map((collection, index) => (
+                <Card key={index} border>
+                  <CardHeader pad="small">{collection.name}</CardHeader>
+                  <CardBody gap="small" pad="small">
+                    <Text size="small">{collection.description}</Text>
+                  </CardBody>
+                  <CardFooter border={{ side: 'top' }} pad="small">
+                    <Link
+                      href={`/search?collectionId=${collection.id}`}
+                      passHref
+                    >
+                      <Button
+                        label="Search"
+                        icon={<Search size={16} />}
+                        plain
+                        color="neutral-2"
+                      />
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))}
+            </Grid>
+          </Box>
         </Box>
       </Page>
     </>

@@ -25,7 +25,9 @@ export default function SearchForm({
   user: UserWithCollections
   searchDisplay?: 'new-page' | 'current-page'
 }) {
+  const router = useRouter()
   const [collection, setCollection] = useState<Partial<Collection>>()
+
   const { keywords } = useKeywords({
     userId: user.id,
     collectionId: collection?.id
@@ -33,11 +35,19 @@ export default function SearchForm({
   const [keywordsValues, setKeywordsValues] = useState<Keyword[]>([])
   const [keywordsOptions, setKeywordOptions] = useState(keywords)
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const router = useRouter()
 
   useEffect(() => {
     setKeywordOptions(keywords)
   }, [keywords])
+
+  useEffect(() => {
+    if (router?.query?.collectionId) {
+      const collection = user.collections.find(
+        (c) => c.id === router?.query?.collectionId
+      )
+      setCollection(collection)
+    }
+  }, [router?.query?.collectionId, user.collections])
 
   function resetForm() {
     setCollection(undefined)
@@ -73,6 +83,7 @@ export default function SearchForm({
           name="collection"
           id="collection"
           onChange={({ value }) => setCollection(value)}
+          value={collection}
         />
       </FormField>
       {keywords?.length && (

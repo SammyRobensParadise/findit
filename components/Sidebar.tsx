@@ -1,5 +1,5 @@
-import { Book, ChartAreaSmooth, Search } from '@carbon/icons-react'
-import { Anchor, Box, Button, Nav } from 'grommet'
+import { Book, Search } from '@carbon/icons-react'
+import { Box, Button, Nav } from 'grommet'
 import Link from 'next/link'
 
 export default function Sidebar() {
@@ -10,7 +10,7 @@ export default function Sidebar() {
       border={{ side: 'right', color: 'dark-6' }}
     >
       <Nav direction="column" pad="medium" background="neutral-2" fill>
-        <Link href="/" passHref>
+        <Link href="/search" passHref>
           <Button
             label="Search"
             color="white"
