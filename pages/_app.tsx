@@ -43,7 +43,7 @@ const StyledContainer = styled(ToastContainer)`
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   return (
-    <Grommet full>
+    <Grommet className="grommet">
       <ClerkProvider {...pageProps}>
         <ClerkLoaded>
           {publicPages.includes(router.pathname) ? (

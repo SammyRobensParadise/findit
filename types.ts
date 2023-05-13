@@ -1,5 +1,5 @@
 import { UserJSON } from '@clerk/nextjs/dist/api'
-import { Collection, User } from '@prisma/client'
+import { Collection, Item, Keyword, User } from '@prisma/client'
 
 export type __clerk_ssr_state = {
   sessionClaims: Record<string, unknown>
@@ -13,6 +13,11 @@ export type ClerkState = {
 }
 
 export type UserWithCollections = User & { collections: Collection[] }
+
+export type ItemWithCollectionAndUserAndKeywords = Item & {
+  Collection: Collection & { User: User }
+  keywords: Keyword[]
+}
 
 export type ItemServerQuery = {
   collectionId: string

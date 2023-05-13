@@ -13,6 +13,7 @@ import { Box, DataTable, Text } from 'grommet'
 import serverRenderItems from '@/functions/server-render-items'
 import { Collection, Item } from '@prisma/client'
 import prisma from '@/lib/prisma'
+import { useRouter } from 'next/router'
 
 export default function Results(props: {
   user: UserWithCollections
@@ -26,6 +27,8 @@ export default function Results(props: {
     items,
     collection: { name: collectionName }
   } = props
+
+  const router = useRouter()
   return (
     <>
       <Head>
@@ -99,7 +102,7 @@ export default function Results(props: {
                 }
               ]}
               data={items}
-              onClickRow={(item) => console.log(item.datum)}
+              onClickRow={({ datum }) => router.push(`/item/${datum.id}`)}
             />
           </Box>
         </Box>

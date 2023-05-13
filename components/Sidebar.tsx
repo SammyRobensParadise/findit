@@ -8,6 +8,8 @@ export default function Sidebar() {
       className="sidebar"
       color="white"
       border={{ side: 'right', color: 'dark-6' }}
+      fill="vertical"
+      style={{ height: 'auto' }}
     >
       <Nav direction="column" pad="medium" background="neutral-2" fill>
         <Link href="/" passHref>

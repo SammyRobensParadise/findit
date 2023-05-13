@@ -8,11 +8,13 @@ export default function Page({
   user
 }: PropsWithChildren<{ user: UserWithCollections }>) {
   return (
-    <Box direction="row">
+    <Box direction="row" fill="vertical">
       <Sidebar />
-      <Box flex>
+      <Box>
         <Navbar user={user} />
-        <Box pad="medium">{children}</Box>
+        <Box pad="medium" flex>
+          {children}
+        </Box>
       </Box>
     </Box>
   )

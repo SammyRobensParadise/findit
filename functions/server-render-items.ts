@@ -3,7 +3,7 @@ import { ItemServerQuery } from '@/types'
 import { Item } from '@prisma/client'
 
 export default async function serverRenderItems(query: ItemServerQuery) {
-  const { collectionId, keywords, text } = query
+  const { keywords, text } = query
   let keywordIds: number[] | null = null
   if (typeof keywords === 'string') {
     // its just a string
