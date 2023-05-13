@@ -30,6 +30,8 @@ prod-migrations:
 	dotenv -e .env.prod -- npx prisma migrate reset --force
 	data
 
+studio:
+	dotenv -e .env.local -- npx prisma studio
 
 
 

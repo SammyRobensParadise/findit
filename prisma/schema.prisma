@@ -14,8 +14,8 @@ model Item {
   id           Int         @id @default(autoincrement())
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  name         String      @db.VarChar(255)
-  description  String?     @db.VarChar(10000)
+  name         String      @db.Text
+  description  String?     @db.Text
   published    Boolean     @default(true)
   keywords     Keyword[]
   userId       String?
@@ -25,7 +25,7 @@ model Item {
 
 model Keyword {
   id           Int         @id @default(autoincrement())
-  name         String      @db.VarChar(1000)
+  name         String      @db.Text
   Item         Item?       @relation(fields: [itemId], references: [id])
   itemId       Int?
   Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -34,8 +34,8 @@ model Keyword {
 
 model Collection {
   id                 String    @id @default(uuid())
-  name               String    @db.VarChar(255)
-  description        String?   @db.VarChar(1000)
+  name               String    @db.Text
+  description        String    @db.Text
   items              Item[]
   collectionKeywords Keyword[]
   user               User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -45,7 +45,7 @@ model Collection {
 model User {
   id           String       @id @default(uuid())
   email        String       @unique
-  name         String?      @db.VarChar(255)
+  name         String?      @db.Text
   firstName    String       @default("Player")
   lastName     String       @default("One")
   lastLoggedIn DateTime?    @default(now()) @map(name: "last_logged_in")
