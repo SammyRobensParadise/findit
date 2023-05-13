@@ -1,13 +1,31 @@
 import Head from 'next/head'
 import { clerkClient, getAuth, buildClerkProps } from '@clerk/nextjs/server'
 import { GetServerSideProps } from 'next'
-import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
+import {
+  ClerkState,
+  ItemServerQuery,
+  UserWithCollections,
+  __clerk_ssr_state
+} from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Text } from 'grommet'
+import { Box, DataTable, Text } from 'grommet'
+import serverRenderItems from '@/functions/server-render-items'
+import { Collection, Item } from '@prisma/client'
+import prisma from '@/lib/prisma'
 
-export default function Results(props: { user: UserWithCollections }) {
-  const { user } = props
+export default function Results(props: {
+  user: UserWithCollections
+  items: Item[]
+  collection: Collection
+  keywords: string[] | string
+  text: string
+}) {
+  const {
+    user,
+    items,
+    collection: { name: collectionName }
+  } = props
   return (
     <>
       <Head>
@@ -19,6 +37,71 @@ export default function Results(props: { user: UserWithCollections }) {
       <Page user={user}>
         <Box gap="medium">
           <Text>Results</Text>
+          <Box fill="vertical" border={{ side: 'bottom' }}>
+            <DataTable
+              a11yTitle="Items Table"
+              size="medium"
+              fill
+              pin
+              border={{
+                header: 'bottom',
+                body: {
+                  color: 'light-2',
+                  side: 'bottom'
+                }
+              }}
+              pad="small"
+              columns={[
+                {
+                  property: 'name',
+                  header: <Text size="small">Name</Text>,
+                  primary: true,
+                  search: true,
+                  align: 'start',
+                  render: ({ name }) => <Text size="small">{name}</Text>,
+                  footer: (
+                    <Text size="small" color="dark-2">
+                      {items?.length} matching items found in {collectionName}
+                    </Text>
+                  )
+                },
+                {
+                  property: 'description',
+                  header: <Text size="small">Description</Text>,
+                  search: true,
+                  render: ({ description }) => (
+                    <Text size="small">{description}</Text>
+                  )
+                },
+                {
+                  property: 'updatedAt',
+                  header: <Text size="small">Updated</Text>,
+                  render: ({ updatedAt }) => (
+                    <Text size="small">
+                      {updatedAt &&
+                        new Date(updatedAt).toLocaleDateString('en-US')}
+                    </Text>
+                  ),
+                  size: 'small',
+                  align: 'end'
+                },
+                {
+                  property: 'createdAt',
+                  header: <Text size="small">Created</Text>,
+                  render: ({ createdAt }) => (
+                    <Text size="small">
+                      {createdAt &&
+                        new Date(createdAt).toLocaleDateString('en-US')}
+                    </Text>
+                  ),
+                  size: 'xsmall',
+                  align: 'end'
+                }
+              ]}
+              data={items}
+              onClickRow={(item) => console.log(item.datum)}
+            />
+          </Box>
         </Box>
       </Page>
     </>
@@ -29,6 +112,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { userId } = getAuth(ctx.req)
   const user = userId ? await clerkClient.users.getUser(userId) : undefined
   const clerkProps = buildClerkProps(ctx.req, { user }) as ClerkState
-  debugger
-  return serverRenderUser(clerkProps)
+  const userData = await serverRenderUser(clerkProps)
+  const itemData = await serverRenderItems(ctx.query as ItemServerQuery)
+  const collection = await prisma.collection.findUnique({
+    where: {
+      id: ctx.query.collectionId as string
+    }
+  })
+  const data = {
+    props: {
+      ...userData.props,
+      ...itemData.props,
+      ...ctx.query,
+      collection
+    }
+  }
+  return data
 }

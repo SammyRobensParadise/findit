@@ -13,3 +13,9 @@ export type ClerkState = {
 }
 
 export type UserWithCollections = User & { collections: Collection[] }
+
+export type ItemServerQuery = {
+  collectionId: string
+  keywords: string | string[]
+  text: string
+}
