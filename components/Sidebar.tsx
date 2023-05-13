@@ -26,14 +26,6 @@ export default function Sidebar() {
             style={{ border: 0 }}
           />
         </Link>
-        <Link href="/stats" passHref>
-          <Button
-            label="Statistics"
-            color="white"
-            icon={<ChartAreaSmooth size={24} />}
-            style={{ border: 0 }}
-          />
-        </Link>
       </Nav>
     </Box>
   )
