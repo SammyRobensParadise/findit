@@ -13,9 +13,18 @@ import {
   Button,
   FormExtendedEvent
 } from 'grommet'
-import { FormEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import queryString from 'query-string'
 
-export default function SearchForm({ user }: { user: UserWithCollections }) {
+import { useEffect, useState } from 'react'
+
+export default function SearchForm({
+  user,
+  searchDisplay = 'new-page'
+}: {
+  user: UserWithCollections
+  searchDisplay?: 'new-page' | 'current-page'
+}) {
   const [collection, setCollection] = useState<Partial<Collection>>()
   const { keywords } = useKeywords({
     userId: user.id,
@@ -24,6 +33,7 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
   const [keywordsValues, setKeywordsValues] = useState<Keyword[]>([])
   const [keywordsOptions, setKeywordOptions] = useState(keywords)
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     setKeywordOptions(keywords)
@@ -44,6 +54,15 @@ export default function SearchForm({ user }: { user: UserWithCollections }) {
     }>
   ) {
     const { value } = event
+    const query = {
+      collectionId: value.collection.id,
+      keywords: value.keywords.map((keyword) => keyword.id),
+      text: value.text
+    }
+    const search = queryString.stringify(query)
+    if (searchDisplay === 'new-page') {
+      router.push(`/search/results?${search}`)
+    }
   }
 
   return (

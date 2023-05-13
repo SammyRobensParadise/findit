@@ -29,5 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { userId } = getAuth(ctx.req)
   const user = userId ? await clerkClient.users.getUser(userId) : undefined
   const clerkProps = buildClerkProps(ctx.req, { user }) as ClerkState
+  debugger
   return serverRenderUser(clerkProps)
 }
