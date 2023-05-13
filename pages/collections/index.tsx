@@ -13,11 +13,12 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Button
+  Button,
+  Anchor
 } from 'grommet'
 import { useContext } from 'react'
 import Link from 'next/link'
-import { Search } from '@carbon/icons-react'
+import { Add, Search } from '@carbon/icons-react'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
@@ -34,6 +35,11 @@ export default function Collections(props: { user: UserWithCollections }) {
       <Page user={user}>
         <Box gap="medium">
           <Text>Collections {`(${user.collections.length})`}</Text>
+          <Anchor
+            href="/collections/new"
+            label="New Collection"
+            icon={<Add size={16} />}
+          />
           <Box>
             <Grid columns={size !== 'small' ? 'small' : '100%'} gap="small">
               {user.collections.map((collection, index) => (
