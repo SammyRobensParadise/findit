@@ -12,8 +12,7 @@ import {
   FormField,
   TextInput,
   TextArea,
-  Keyboard,
-  FormExtendedEvent
+  Keyboard
 } from 'grommet'
 import { useRef, useState } from 'react'
 import Link from 'next/link'

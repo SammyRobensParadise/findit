@@ -14,15 +14,27 @@ import {
   CardBody,
   CardFooter,
   Button,
-  Anchor
+  Anchor,
+  Tag,
+  Menu,
+  Tip
 } from 'grommet'
 import { useContext } from 'react'
 import Link from 'next/link'
-import { Add, Search } from '@carbon/icons-react'
+import {
+  Add,
+  OverflowMenuVertical,
+  Search,
+  TrashCan
+} from '@carbon/icons-react'
+import { useCollections } from '@/hooks/collections'
+import { useRouter } from 'next/router'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
   const size = useContext(ResponsiveContext)
+  const { remove } = useCollections({ userId: user.id })
+  const router = useRouter()
 
   return (
     <>
@@ -44,9 +56,44 @@ export default function Collections(props: { user: UserWithCollections }) {
             <Grid columns={size !== 'small' ? 'small' : '100%'} gap="small">
               {user.collections.map((collection, index) => (
                 <Card key={index} border>
-                  <CardHeader pad="small">{collection.name}</CardHeader>
+                  <CardHeader pad="small">
+                    <Text>{collection.name}</Text>
+                    <Menu
+                      icon={<OverflowMenuVertical size={16} />}
+                      items={[
+                        {
+                          label: (
+                            <Tip
+                              content={
+                                <Text size="small">
+                                  Delete Collection. This action cannot be
+                                  undone.
+                                </Text>
+                              }
+                            >
+                              <Text>Delete</Text>
+                            </Tip>
+                          ),
+                          icon: <TrashCan size={20} color="#FF4040" />,
+                          onClick: async () => {
+                            const response = await remove({
+                              collectionId: collection.id
+                            })
+                            if (response.message === 'success') {
+                              router.replace(router.asPath)
+                            }
+                          }
+                        }
+                      ]}
+                    />
+                  </CardHeader>
                   <CardBody gap="small" pad="small">
                     <Text size="small">{collection.description}</Text>
+                    <Tag
+                      name="Items"
+                      value={`${collection._count.items}`}
+                      size="small"
+                    />
                   </CardBody>
                   <CardFooter border={{ side: 'top' }} pad="small">
                     <Link

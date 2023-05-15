@@ -12,7 +12,15 @@ export type ClerkState = {
   __clerk_ssr_state: __clerk_ssr_state
 }
 
-export type UserWithCollections = User & { collections: Collection[] }
+export interface CollectionWithItemCount extends Collection {
+  _count: {
+    items: number
+  }
+}
+
+export type UserWithCollections = User & {
+  collections: CollectionWithItemCount[]
+}
 
 export type ItemWithCollectionAndUserAndKeywords = Item & {
   Collection: Collection & { User: User }

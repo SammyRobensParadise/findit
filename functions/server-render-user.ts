@@ -12,7 +12,12 @@ export default async function serverRenderUser(state: ClerkState) {
         select: {
           name: true,
           id: true,
-          description: true
+          description: true,
+          _count: {
+            select: {
+              items: true
+            }
+          }
         }
       }
     }

@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
 }
 
 datasource db {
@@ -20,7 +20,7 @@ model Item {
   published    Boolean     @default(true)
   keywords     Keyword[]
   userId       String?
-  Collection   Collection? @relation(fields: [collectionId], references: [id])
+  Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   collectionId String?
 
   @@fulltext([name])

@@ -38,5 +38,20 @@ export function useCollections({ userId }: { userId: string }) {
     }
     return response
   }
-  return { collections: data?.collections, error, create }
+
+  async function remove({ collectionId }: { collectionId: string }) {
+    const res = await fetch(`/api/collections/${collectionId}/delete`, {
+      method: 'DELETE'
+    })
+    const response = await res.json()
+
+    if (response.message === 'success') {
+      toast.success(`Deleted Collection and Items`)
+    } else {
+      toast.error('Unable to Delete Collection')
+    }
+    return response
+  }
+
+  return { collections: data?.collections, error, create, remove }
 }
