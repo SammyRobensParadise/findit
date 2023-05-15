@@ -23,6 +23,7 @@ import { useContext } from 'react'
 import Link from 'next/link'
 import {
   Add,
+  Launch,
   OverflowMenuVertical,
   Search,
   TrashCan
@@ -83,6 +84,12 @@ export default function Collections(props: { user: UserWithCollections }) {
                               router.replace(router.asPath)
                             }
                           }
+                        },
+                        {
+                          label: <Text>Open in New Window</Text>,
+                          icon: <Launch size={20} />,
+                          onClick: () =>
+                            router.push(`/collections/${collection.id}`)
                         }
                       ]}
                     />
