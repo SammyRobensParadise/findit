@@ -75,7 +75,11 @@ export default function Collections(props: { user: UserWithCollections }) {
                               <Text>Delete</Text>
                             </Tip>
                           ),
-                          icon: <TrashCan size={20} color="#FF4040" />,
+                          icon: (
+                            <Box pad={{ right: 'small' }}>
+                              <TrashCan size={20} color="#FF4040" />
+                            </Box>
+                          ),
                           onClick: async () => {
                             const response = await remove({
                               collectionId: collection.id
@@ -87,7 +91,11 @@ export default function Collections(props: { user: UserWithCollections }) {
                         },
                         {
                           label: <Text>Open in New Window</Text>,
-                          icon: <Launch size={20} />,
+                          icon: (
+                            <Box pad={{ right: 'small' }}>
+                              <Launch size={20} />
+                            </Box>
+                          ),
                           onClick: () =>
                             router.push(`/collections/${collection.id}`)
                         }

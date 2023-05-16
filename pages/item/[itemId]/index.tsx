@@ -13,8 +13,9 @@ import { Box, Button, Card, Tag, Text } from 'grommet'
 import { serverRenderItem } from '@/functions/server-render-item'
 import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { Csv, Printer } from '@carbon/icons-react'
+import { Csv, Edit, Printer } from '@carbon/icons-react'
 import { CSVLink } from 'react-csv'
+import Link from 'next/link'
 
 export default function Results(props: {
   user: UserWithCollections
@@ -55,6 +56,9 @@ export default function Results(props: {
             <CSVLink data={[downloadableItem]} filename={`item-${item.id}.csv`}>
               <Button label="Download CSV" icon={<Csv size={16} />} />
             </CSVLink>
+            <Link href={`/item/${item.id}/edit`} passHref>
+              <Button label="Edit" icon={<Edit size={16} />}></Button>
+            </Link>
           </Box>
           <Card>
             <Box gap="medium" pad="medium" ref={componentRef}>

@@ -37,7 +37,7 @@ const Suspense = () => {
       }}
     >
       <Head>
-        <title>PharmaBox</title>
+        <title>Findit</title>
         <meta
           name="description"
           content="Pharmabox Homepage. Login to continue"

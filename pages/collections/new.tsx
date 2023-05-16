@@ -15,7 +15,6 @@ import {
   Keyboard
 } from 'grommet'
 import { useRef, useState } from 'react'
-import Link from 'next/link'
 import { Close } from '@carbon/icons-react'
 import { useCollections } from '@/hooks/collections'
 import { useRouter } from 'next/router'
