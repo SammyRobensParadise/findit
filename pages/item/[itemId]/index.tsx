@@ -114,7 +114,7 @@ export default function Results(props: {
               <Box gap="small">
                 <Text size="small">Created:</Text>
                 <Text>
-                  {new Date(item.updatedAt).toLocaleDateString('en-US')}
+                  {new Date(item.createdAt).toLocaleDateString('en-US')}
                 </Text>
               </Box>
               <Box gap="small">

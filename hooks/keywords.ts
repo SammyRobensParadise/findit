@@ -29,7 +29,7 @@ export function useKeywords({
   }: {
     name: string
     collectionId: string
-    itemId: string
+    itemId?: string
   }) {
     const res = await fetch(`/api/keywords/create`, {
       method: 'POST',

@@ -2,6 +2,8 @@ import { UserWithCollections } from '@/types'
 import { useUser } from '@clerk/nextjs'
 import { Avatar, Box, Button, DropButton, Header, Text } from 'grommet'
 import { useClerk } from '@clerk/clerk-react'
+import Link from 'next/link'
+import { DocumentAdd } from '@carbon/icons-react'
 
 export default function Navbar({ user }: { user: UserWithCollections }) {
   const { isLoaded, user: clerkUser } = useUser()
@@ -12,7 +14,15 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
       background="light-2"
       border={{ color: 'light-4', side: 'bottom' }}
     >
-      <Box></Box>
+      <Box>
+        <Link href="/item/new">
+          <Button
+            label="Create Item"
+            size="small"
+            icon={<DocumentAdd size={16} />}
+          />
+        </Link>
+      </Box>
       <Box direction="row" gap="medium" alignContent="center">
         <Box
           direction="row"

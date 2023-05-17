@@ -23,6 +23,7 @@ import { useContext } from 'react'
 import Link from 'next/link'
 import {
   Add,
+  DocumentAdd,
   Launch,
   OverflowMenuVertical,
   Search,
@@ -53,10 +54,10 @@ export default function Collections(props: { user: UserWithCollections }) {
             label="New Collection"
             icon={<Add size={16} />}
           />
-          <Box>
-            <Grid columns={size !== 'small' ? 'small' : '100%'} gap="small">
+          <Box fill="horizontal">
+            <Grid columns={{ count: 3, size: 'auto' }} gap="small">
               {user.collections.map((collection, index) => (
-                <Card key={index} border>
+                <Card key={index} border width="100%">
                   <CardHeader pad="small">
                     <Text>{collection.name}</Text>
                     <Menu
@@ -119,6 +120,16 @@ export default function Collections(props: { user: UserWithCollections }) {
                         label="Search"
                         icon={<Search size={16} />}
                         plain
+                        color="neutral-2"
+                      />
+                    </Link>
+                    <Link
+                      href={`/item/new?collectionId=${collection.id}`}
+                      passHref
+                    >
+                      <Button
+                        label="Create Item"
+                        icon={<DocumentAdd size={16} />}
                         color="neutral-2"
                       />
                     </Link>

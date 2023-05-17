@@ -12,7 +12,6 @@ import Page from '@/components/Page'
 import {
   Box,
   Button,
-  Card,
   Form,
   FormExtendedEvent,
   FormField,
@@ -23,7 +22,7 @@ import {
   TextInput
 } from 'grommet'
 import { serverRenderItem } from '@/functions/server-render-item'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Collection, Keyword } from '@prisma/client'
 import { useKeywords } from '@/hooks/keywords'
 import { Add } from '@carbon/icons-react'

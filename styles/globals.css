@@ -112,3 +112,7 @@ kbd {
   padding: 2px 4px;
   white-space: nowrap;
 }
+
+button[role='menuitem'] {
+  opacity: 1;
+}

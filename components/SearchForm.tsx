@@ -86,8 +86,8 @@ export default function SearchForm({
           value={collection}
         />
       </FormField>
-      {keywords?.length && (
-        <Box>
+      <Box>
+        {!!keywords?.length ? (
           <FormField name="keywords" label="Keywords" htmlFor="keywords">
             <Box pad="small" direction="row" gap="small">
               {keywordsValues.map((value: Keyword) => (
@@ -114,6 +114,16 @@ export default function SearchForm({
               }}
             />
           </FormField>
+        ) : (
+          <>
+            {!!collection && (
+              <Box pad="small">
+                <Text color="dark-6">No keywords in this collection</Text>
+              </Box>
+            )}
+          </>
+        )}
+        {collection && (
           <FormField name="text" label="Search Text" htmlFor="text">
             <TextInput
               name="text"
@@ -123,12 +133,12 @@ export default function SearchForm({
               onChange={({ target: { value } }) => setSearchTerm(value)}
             />
           </FormField>
-          <Box direction="row" gap="medium">
-            <Button type="reset" label="Reset Form" />
-            <Button type="submit" primary label="Search" />
-          </Box>
+        )}
+        <Box direction="row" gap="medium">
+          <Button type="reset" label="Reset Form" />
+          <Button type="submit" primary label="Search" />
         </Box>
-      )}
+      </Box>
     </Form>
   )
 }

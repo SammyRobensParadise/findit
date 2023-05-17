@@ -9,16 +9,18 @@ export function useItems({ userId }: { userId: string }) {
   async function create({
     name,
     description,
-    collectionId
+    collectionId,
+    keywords
   }: {
     name: string
     description: string
     collectionId: string
+    keywords: Keyword[]
   }) {
     const res = await fetch('/api/items/create', {
       method: 'POST',
       body: JSON.stringify({
-        data: { name, description, collectionId, userId }
+        data: { name, description, collectionId, userId, keywords }
       })
     })
 
