@@ -13,9 +13,11 @@ import { Box, Button, Card, Tag, Text } from 'grommet'
 import { serverRenderItem } from '@/functions/server-render-item'
 import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { Csv, Edit, Printer } from '@carbon/icons-react'
+import { Csv, Edit, Printer, TrashCan } from '@carbon/icons-react'
 import { CSVLink } from 'react-csv'
 import Link from 'next/link'
+import { useItems } from '@/hooks/items'
+import { useRouter } from 'next/router'
 
 export default function Results(props: {
   user: UserWithCollections
@@ -23,10 +25,20 @@ export default function Results(props: {
 }) {
   const { user, item } = props
 
+  const { remove } = useItems({ userId: user.id })
+  const router = useRouter()
+
   const componentRef = useRef(null)
   const handlePrint = useReactToPrint({
     content: () => componentRef?.current
   })
+
+  async function handleDelete() {
+    const response = await remove({ itemId: item.id.toString() })
+    if (response.message === 'success') {
+      router.push('/search')
+    }
+  }
 
   const downloadableItem = {
     name: item.name,
@@ -59,6 +71,12 @@ export default function Results(props: {
             <Link href={`/item/${item.id}/edit`} passHref>
               <Button label="Edit" icon={<Edit size={16} />}></Button>
             </Link>
+            <Button
+              color="status-critical"
+              label="Delete Item"
+              icon={<TrashCan size={16} />}
+              onClick={handleDelete}
+            />
           </Box>
           <Card>
             <Box gap="medium" pad="medium" ref={componentRef}>

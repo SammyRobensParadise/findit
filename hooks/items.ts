@@ -33,7 +33,7 @@ export function useItems({ userId }: { userId: string }) {
   }
 
   async function remove({ itemId }: { itemId: string }) {
-    const res = await fetch(`/api/items/${itemId}/delete`, {
+    const res = await fetch(`/api/items/${itemId}/delete?userId=${userId}`, {
       method: 'DELETE'
     })
     const response = await res.json()
