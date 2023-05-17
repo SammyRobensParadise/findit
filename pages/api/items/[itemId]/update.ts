@@ -1,15 +1,18 @@
 import prisma from '@/lib/prisma'
+import { Keyword } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 interface CreateRequest extends NextApiRequest {
   body: string
 }
 
-type NewKeyword = {
+type UpdateItem = {
   name: string
   userId: string
   collectionId: string
   itemId: string
+  description: string
+  keywords: Keyword[]
 }
 
 export default async function handler(
@@ -23,7 +26,7 @@ export default async function handler(
   }
   try {
     const body = JSON.parse(req.body)
-    const data = body.data as NewKeyword
+    const data = body.data as UpdateItem
 
     const user = await prisma.user.findUnique({
       where: { id: data.userId },
@@ -35,26 +38,40 @@ export default async function handler(
     )
 
     if (collection) {
-      const keyword = await prisma.keyword.create({
+      await prisma.item.update({
+        where: {
+          id: parseInt(data.itemId)
+        },
         data: {
           name: data.name,
-          Collection: {
-            connect: {
-              id: collection.id
-            }
-          },
-          ...(data.itemId && {
-            Item: {
-              connect: {
-                id: parseInt(data.itemId)
+          description: data.description,
+          collectionId: data.collectionId
+        }
+      })
+      Promise.all(
+        data.keywords.map(async (keyword) => {
+          await prisma.item.update({
+            where: { id: parseInt(data.itemId) },
+            data: {
+              keywords: {
+                connect: {
+                  id: parseInt(`${keyword.id}`)
+                }
               }
             }
           })
+        })
+      )
+
+      const item = await prisma.item.findUnique({
+        where: {
+          id: parseInt(data.itemId)
         }
       })
-      return res.status(200).json({ message: 'success', keyword })
+
+      return res.status(200).json({ message: 'success', item })
     } else {
-      res.status(403).json({ message: 'Permision Denied', keyword: null })
+      res.status(403).json({ message: 'Permision Denied', item: null })
     }
   } catch (error) {
     return res.status(500).json({ message: error })

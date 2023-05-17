@@ -14,6 +14,7 @@ import {
   Button,
   Card,
   Form,
+  FormExtendedEvent,
   FormField,
   Select,
   SelectMultiple,
@@ -26,6 +27,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Collection, Keyword } from '@prisma/client'
 import { useKeywords } from '@/hooks/keywords'
 import { Add } from '@carbon/icons-react'
+import Link from 'next/link'
+import { useItems } from '@/hooks/items'
+import { useRouter } from 'next/router'
 
 export default function EditItem(props: {
   user: UserWithCollections
@@ -36,17 +40,16 @@ export default function EditItem(props: {
   const [itemDescription, setItemDescription] = useState<string | null>(
     item?.description
   )
+  const router = useRouter()
   const itemCollectionMapping: Collection = {
     name: item.Collection.name,
     description: item.Collection.description,
     id: item.Collection.id,
     userId: item.Collection.userId
   }
-
   const [itemCollection, setItemCollection] = useState<Collection>(
     itemCollectionMapping
   )
-
   const { keywords, create } = useKeywords({
     userId: user.id,
     collectionId: item.collectionId as string
@@ -61,17 +64,38 @@ export default function EditItem(props: {
   )
   const [keywordsOptions, setKeywordOptions] = useState(keywords)
   const [keywordSearch, setKeywordSearch] = useState<string>('')
+  const { update } = useItems({ userId: user.id })
 
   useEffect(() => {
     setKeywordOptions(keywords)
   }, [keywords])
 
   async function createKeyword() {
-    const response = await create({
+    await create({
       name: keywordSearch,
       collectionId: itemCollection.id,
       itemId: item.id.toString()
     })
+  }
+
+  async function handleUpdate(
+    event: FormExtendedEvent<{
+      itemCollection: Collection
+      keywords: Keyword[]
+      itemDescription: string
+      itemName: string
+    }>
+  ) {
+    const response = await update({
+      itemId: item.id.toString(),
+      name: event.value.itemName,
+      description: event.value.itemDescription,
+      keywords: event.value.keywords,
+      collectionId: itemCollection.id
+    })
+    if (response.message === 'success') {
+      router.push(`/item/${item.id}`)
+    }
   }
 
   return (
@@ -83,25 +107,25 @@ export default function EditItem(props: {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Page user={user}>
-        <Box gap="medium" flex="grow" pad="small">
+        <Box gap="medium" flex="grow" pad="small" animation="fadeIn">
           <Text>Edit Item: {item.id}</Text>
-          <Form>
-            <FormField name="item-name" htmlFor="item-name" label="Item Name">
+          <Form onSubmit={handleUpdate}>
+            <FormField name="itemName" htmlFor="itemName" label="Item Name">
               <TextInput
-                name="item-name"
-                id="item-name"
+                name="itemName"
+                id="itemName"
                 value={itemName}
                 onChange={({ target: { value } }) => setItemName(value)}
               />
             </FormField>
             <FormField
-              name="item-description"
-              htmlFor="item-description"
+              name="itemDesciption"
+              htmlFor="itemDesciption"
               label="Item Description"
             >
               <TextInput
-                name="item-description"
-                id="item-description"
+                name="itemDesciption"
+                id="itemDesciption"
                 value={itemDescription ?? ''}
                 onChange={({ target: { value } }) => setItemDescription(value)}
               />
@@ -147,18 +171,24 @@ export default function EditItem(props: {
               />
             </FormField>
             <FormField
-              name="item-collection"
-              htmlFor="item-collection"
+              name="itemCollection"
+              htmlFor="itemCollection"
               label="Item Collection"
             >
               <Select
-                name="item-collection"
-                id="item-collection"
+                name="itemCollection"
+                id="itemCollection"
                 defaultValue={itemCollection}
                 options={user.collections}
                 onChange={({ target: { value } }) => setItemCollection(value)}
               />
             </FormField>
+            <Box direction="row" gap="small" alignContent="stretch">
+              <Link href={`/item/${item.id}`} passHref>
+                <Button label="Cancel" />
+              </Link>
+              <Button primary type="submit" label="Update Item" />
+            </Box>
           </Form>
         </Box>
       </Page>
