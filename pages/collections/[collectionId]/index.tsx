@@ -7,22 +7,19 @@ import Page from '@/components/Page'
 import {
   Box,
   Card,
-  Grid,
   Text,
-  ResponsiveContext,
   CardHeader,
   CardBody,
   CardFooter,
   Button,
-  Anchor,
   Tag,
   Menu,
   Tip
 } from 'grommet'
-import { useContext } from 'react'
 import Link from 'next/link'
 import {
-  Add,
+  DocumentAdd,
+  ImportExport,
   OverflowMenuVertical,
   Search,
   TrashCan
@@ -32,7 +29,6 @@ import { useRouter } from 'next/router'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
-  const size = useContext(ResponsiveContext)
   const { remove } = useCollections({ userId: user.id })
   const router = useRouter()
 
@@ -100,6 +96,25 @@ export default function Collections(props: { user: UserWithCollections }) {
                       label="Search Collection"
                       icon={<Search size={16} />}
                       plain
+                      color="neutral-2"
+                    />
+                  </Link>
+                  <Link
+                    href={`/item/new?collectionId=${collection.id}`}
+                    passHref
+                  >
+                    <Button
+                      a11yTitle="Create Item"
+                      label="Create Item"
+                      icon={<DocumentAdd size={16} />}
+                      color="neutral-2"
+                    />
+                  </Link>
+                  <Link href={`/collections/${collection.id}/import`} passHref>
+                    <Button
+                      a11yTitle="Import Items"
+                      label="Import Items"
+                      icon={<ImportExport size={16} />}
                       color="neutral-2"
                     />
                   </Link>

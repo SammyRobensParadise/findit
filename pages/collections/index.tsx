@@ -59,7 +59,9 @@ export default function Collections(props: { user: UserWithCollections }) {
               {user.collections.map((collection, index) => (
                 <Card key={index} border width="100%">
                   <CardHeader pad="small">
-                    <Text>{collection.name}</Text>
+                    <Anchor href={`/collections/${collection.id}`}>
+                      {collection.name}
+                    </Anchor>
                     <Menu
                       icon={<OverflowMenuVertical size={16} />}
                       items={[
@@ -91,7 +93,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                           }
                         },
                         {
-                          label: <Text>Open in New Window</Text>,
+                          label: <Text>Open</Text>,
                           icon: (
                             <Box pad={{ right: 'small' }}>
                               <Launch size={20} />
@@ -128,6 +130,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                       passHref
                     >
                       <Button
+                        a11yTitle="Create Item"
                         label="Create Item"
                         icon={<DocumentAdd size={16} />}
                         color="neutral-2"
