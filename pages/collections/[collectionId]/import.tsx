@@ -4,16 +4,28 @@ import { GetServerSideProps } from 'next'
 import { ClerkState, UserWithCollections, __clerk_ssr_state } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Text, Button, FileInput, Layer, FormField, Form } from 'grommet'
+import {
+  Box,
+  Text,
+  Button,
+  FileInput,
+  Layer,
+  FormField,
+  Form,
+  Spinner
+} from 'grommet'
 import Papa from 'papaparse'
 
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
+import { Item } from '@prisma/client'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
   const router = useRouter()
   const [validatingFile, setValidationFile] = useState(false)
+  const [validationError, setValidationError] = useState(false)
+  const [uploadData, setUploadData] = useState<Partial<Item[]>>([])
 
   const { collectionId } = router.query
 
@@ -21,8 +33,44 @@ export default function Collections(props: { user: UserWithCollections }) {
     (collection) => collection.id === collectionId
   )
 
-  function validateFile(file: File) {
+  function hasRequiredFields(fields: string[] | undefined) {
+    return !!(
+      fields?.includes('name') &&
+      fields?.includes('description') &&
+      fields.includes('keywords')
+    )
+  }
+
+  function validateFile(event: ChangeEvent<HTMLInputElement> | undefined) {
     setValidationFile(true)
+    setValidationError(false)
+    if (event?.target.files?.length) {
+      Papa.parse(event?.target?.files[0], {
+        header: true,
+        skipEmptyLines: true,
+        complete: ({
+          data,
+          meta
+        }: {
+          meta: Papa.ParseMeta
+          data: Partial<Item[]>
+        }) => {
+          const hasFields: boolean = hasRequiredFields(meta.fields)
+          if (!hasFields) {
+            setValidationFile(false)
+            setValidationError(true)
+            return false
+          } else {
+            setValidationFile(false)
+            setValidationError(false)
+            setUploadData(data)
+            return true
+          }
+        }
+      })
+    }
+    setValidationFile(false)
+    setValidationError(false)
   }
 
   return (
@@ -49,6 +97,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                       accept=".csv"
                       name="file-input"
                       id="file-input"
+                      onChange={validateFile}
                       confirmRemove={({ onConfirm, onCancel }) => (
                         <Layer onClickOutside={onCancel} onEsc={onCancel}>
                           <Box pad="medium" gap="medium">
@@ -71,7 +120,26 @@ export default function Collections(props: { user: UserWithCollections }) {
                       )}
                     />
                   </FormField>
-                  <Button label="Submit" type="submit" />
+                  {validatingFile && (
+                    <Box align="center" pad="small" gap="small">
+                      <Text>Validating File...</Text>
+                      <Spinner size="large" />
+                    </Box>
+                  )}
+                  {validationError && (
+                    <Box align="center" pad="medium" gap="medium">
+                      <Text color="status-critical">
+                        Invalid File Format. The following CSV fields are
+                        required: <b>name</b>, <b>description</b>,{' '}
+                        <b>keywords</b>.
+                      </Text>
+                    </Box>
+                  )}
+                  <Button
+                    label="Submit"
+                    type="submit"
+                    disabled={!uploadData.length && validationError}
+                  />
                 </Form>
               </Box>
             )}
