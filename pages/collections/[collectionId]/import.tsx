@@ -19,6 +19,8 @@ import Papa from 'papaparse'
 import { useRouter } from 'next/router'
 import { ChangeEvent, useState } from 'react'
 import { Item } from '@prisma/client'
+import { toast } from 'react-toastify'
+import { useItems } from '@/hooks/items'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
@@ -26,6 +28,7 @@ export default function Collections(props: { user: UserWithCollections }) {
   const [validatingFile, setValidationFile] = useState(false)
   const [validationError, setValidationError] = useState(false)
   const [uploadData, setUploadData] = useState<Partial<Item[]>>([])
+  const { createMany } = useItems({ userId: user.id })
 
   const { collectionId } = router.query
 
@@ -56,13 +59,16 @@ export default function Collections(props: { user: UserWithCollections }) {
           data: Partial<Item[]>
         }) => {
           const hasFields: boolean = hasRequiredFields(meta.fields)
+          console.log(data)
           if (!hasFields) {
             setValidationFile(false)
             setValidationError(true)
+            toast.error('Invalid file.')
             return false
           } else {
             setValidationFile(false)
             setValidationError(false)
+            toast.info('File formatted correctly.')
             setUploadData(data)
             return true
           }
@@ -71,6 +77,15 @@ export default function Collections(props: { user: UserWithCollections }) {
     }
     setValidationFile(false)
     setValidationError(false)
+  }
+
+  async function handleSubmit() {
+    if (typeof collectionId === 'string') {
+      const response = await createMany({ data: uploadData, collectionId })
+      if (response.message === 'success') {
+        router.push(`/collections/${collectionId}`)
+      }
+    }
   }
 
   return (
@@ -87,7 +102,7 @@ export default function Collections(props: { user: UserWithCollections }) {
           <Box>
             {collection && (
               <Box gap="small">
-                <Form onSubmit={({ value }) => console.log(value)}>
+                <Form onSubmit={handleSubmit}>
                   <FormField
                     label="Upload CSV"
                     name="file-input"

@@ -1,4 +1,4 @@
-import { Collection, Keyword } from '@prisma/client'
+import { Collection, Item, Keyword } from '@prisma/client'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
@@ -27,9 +27,30 @@ export function useItems({ userId }: { userId: string }) {
     const response = await res.json()
 
     if (response.message === 'success') {
-      toast.success(`Created Item ${response.item.name}`)
+      toast.success(`Created item ${response.item.name}`)
     } else {
-      toast.error('Unable to Create Item')
+      toast.error('Unable to create item')
+    }
+    return response
+  }
+
+  async function createMany({
+    data,
+    collectionId
+  }: {
+    data: Partial<Item[]>
+    collectionId: string
+  }) {
+    const res = await fetch('/api/items/create-many', {
+      method: 'POST',
+      body: JSON.stringify({ data: { items: data, userId, collectionId } })
+    })
+    const response = await res.json()
+
+    if (response.message === 'success') {
+      toast.success('Imported items')
+    } else {
+      toast.error('Unable to impot items')
     }
     return response
   }
@@ -84,5 +105,5 @@ export function useItems({ userId }: { userId: string }) {
     }
   }
 
-  return { create, remove, update }
+  return { create, remove, update, createMany }
 }

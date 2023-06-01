@@ -41,12 +41,34 @@ export default function Results(props: {
   }
 
   const downloadableItem = {
-    name: item.name,
-    description: item.description,
-    id: item.id,
-    keywords: item.keywords.map((k) => k.name).toString(),
-    collection: item.Collection.name,
-    collectionId: item.Collection.id
+    name: item?.name,
+    description: item?.description,
+    id: item?.id,
+    keywords: item?.keywords.map((k) => k.name).toString(),
+    collection: item?.Collection.name,
+    collectionId: item?.Collection.id
+  }
+
+  if (!item) {
+    return (
+      <>
+        <Head>
+          <title>Findit | Not Found</title>
+          <meta
+            name="description"
+            content="Findit Home Page, Search or Create"
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Page user={user}>
+          <Text>
+            The item you are looking for does not exist or has been deleted. If
+            you think this is an error, contact your system administrator. 😢
+          </Text>
+        </Page>
+      </>
+    )
   }
 
   return (

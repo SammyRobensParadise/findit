@@ -17,7 +17,7 @@ export default async function serverRenderItems(query: ItemServerQuery) {
   let Items: (Item | null)[] = []
   if (keywordIds) {
     const keywordItems = await prisma.keyword.findMany({
-      where: { id: { in: keywordIds } },
+      where: { id: { in: keywordIds }, collectionId: query.collectionId },
       include: {
         Item: true
       }
@@ -33,7 +33,8 @@ export default async function serverRenderItems(query: ItemServerQuery) {
     const textSearchItems = await prisma.item.findMany({
       where: {
         description: { search: text },
-        name: { search: text }
+        name: { search: text },
+        collectionId: query.collectionId
       },
       orderBy: {
         name: 'asc'

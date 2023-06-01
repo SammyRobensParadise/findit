@@ -119,9 +119,9 @@ export default function Collections(props: { user: UserWithCollections }) {
                       passHref
                     >
                       <Button
+                        plain
                         label="Search"
                         icon={<Search size={16} />}
-                        plain
                         color="neutral-2"
                       />
                     </Link>
@@ -130,6 +130,8 @@ export default function Collections(props: { user: UserWithCollections }) {
                       passHref
                     >
                       <Button
+                        plain
+                        secondary
                         a11yTitle="Create Item"
                         label="Create Item"
                         icon={<DocumentAdd size={16} />}
