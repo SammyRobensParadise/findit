@@ -51,7 +51,7 @@ export default function Results(props: {
       </>
     )
   }
-
+  console.log(items)
   return (
     <>
       <Head>

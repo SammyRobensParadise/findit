@@ -48,11 +48,7 @@ export default async function handler(
             data: {
               name: item.name,
               description: item.description,
-              Collection: {
-                connect: {
-                  id: item.collectionId
-                }
-              }
+              collectionId: item.collectionId
             }
           })
           itemIds.push(newItem.id)
