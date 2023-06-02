@@ -130,15 +130,23 @@ async function createCollections({
       data: [...mappedKeywords]
     })
 
-    Promise.all(
+    await Promise.all(
       mappedKeywords.map(async (keyword) => {
+        console.log(keywords)
         const ref = refTable.find((ref) => ref.keywordId === keyword.id)
-        await prisma.keyword.update({
-          where: { id: keyword.id },
-          data: {
-            itemId: ref?.itemId
+        if (ref) {
+          try {
+            await prisma.keyword.update({
+              where: { id: keyword.id },
+              data: {
+                itemId: ref?.itemId
+              }
+            })
+          } catch (error) {
+            console.error('ERROR')
+            console.error(error)
           }
-        })
+        }
       })
     )
 

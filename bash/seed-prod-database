@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -o allexport
+source .env.prod
+set +o allexport
+echo "reseting prod database..."
+dotenv -e .env.prod -- npx prisma migrate reset --force
+echo "seeding test data..."
+npx ts-node lib/scripts/seed-database.ts
