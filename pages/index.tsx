@@ -38,7 +38,7 @@ const Suspense = () => {
     >
       <Head>
         <title>Findit</title>
-        <meta name="description" content="Findit Homepage" />
+        <meta name="description" content="Findit. Your homepage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
     </div>
