@@ -108,6 +108,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                       label="Create Item"
                       icon={<DocumentAdd size={16} />}
                       color="neutral-2"
+                      plain
                     />
                   </Link>
                   <Link href={`/collections/${collection.id}/import`} passHref>
@@ -116,6 +117,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                       label="Import Items"
                       icon={<ImportExport size={16} />}
                       color="neutral-2"
+                      plain
                     />
                   </Link>
                 </CardFooter>
