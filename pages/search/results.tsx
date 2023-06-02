@@ -4,20 +4,23 @@ import { GetServerSideProps } from 'next'
 import {
   ClerkState,
   ItemServerQuery,
+  ItemWithCollectionAndUserAndKeywords,
   UserWithCollections,
   __clerk_ssr_state
 } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, DataTable, Text } from 'grommet'
+import { Box, Button, DataTable, Text } from 'grommet'
 import serverRenderItems from '@/functions/server-render-items'
-import { Collection, Item } from '@prisma/client'
+import { Collection } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { useRouter } from 'next/router'
+import { Csv } from '@carbon/icons-react'
+import { CSVLink } from 'react-csv'
 
 export default function Results(props: {
   user: UserWithCollections
-  items: Item[]
+  items: ItemWithCollectionAndUserAndKeywords[]
   collection: Collection
   keywords: string[] | string
   text: string
@@ -51,7 +54,14 @@ export default function Results(props: {
       </>
     )
   }
-  console.log(items)
+  const printableItems = items.map((item) => ({
+    name: item?.name,
+    description: item?.description,
+    id: item?.id,
+    keywords: item?.keywords.map((k) => k.name).toString(),
+    collection: item?.Collection.name,
+    collectionId: item?.Collection.id
+  }))
   return (
     <>
       <Head>
@@ -63,6 +73,14 @@ export default function Results(props: {
       <Page user={user}>
         <Box gap="medium">
           <Text>Results</Text>
+          <Box direction="row" flex="grow" gap="small">
+            <CSVLink
+              data={printableItems}
+              filename={`item-${items.length}.csv`}
+            >
+              <Button label="Download as CSV" icon={<Csv size={16} />} />
+            </CSVLink>
+          </Box>
           <Box fill="vertical" border={{ side: 'bottom' }}>
             {items.length && (
               <DataTable

@@ -79,6 +79,7 @@ export default function SearchForm({
     <Form onReset={resetForm} onSubmit={Submit}>
       <FormField name="collection" label="Collection" htmlFor="collection">
         <Select
+          placeholder="Select collection..."
           options={user.collections}
           name="collection"
           id="collection"

@@ -22,6 +22,10 @@ export type UserWithCollections = User & {
   collections: CollectionWithItemCount[]
 }
 
+export type ItemWithKeywords = Item & {
+  keywords: Keyword[]
+}
+
 export type ItemWithCollectionAndUserAndKeywords = Item & {
   Collection: Collection & { User: User }
   keywords: Keyword[]

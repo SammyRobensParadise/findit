@@ -1,5 +1,9 @@
 import prisma from '@/lib/prisma'
-import { ItemServerQuery } from '@/types'
+import {
+  ItemServerQuery,
+  ItemWithCollectionAndUserAndKeywords,
+  ItemWithKeywords
+} from '@/types'
 import { Item } from '@prisma/client'
 
 export default async function serverRenderItems(query: ItemServerQuery) {
@@ -19,7 +23,9 @@ export default async function serverRenderItems(query: ItemServerQuery) {
     const keywordItems = await prisma.keyword.findMany({
       where: { id: { in: keywordIds }, collectionId: query.collectionId },
       include: {
-        Item: true
+        Item: {
+          include: { keywords: true, Collection: true }
+        }
       }
     })
     Items = [
@@ -35,6 +41,10 @@ export default async function serverRenderItems(query: ItemServerQuery) {
         name: { search: text },
         collectionId: query.collectionId
       },
+      include: {
+        keywords: true,
+        Collection: true
+      },
       orderBy: {
         name: 'asc'
       }
@@ -45,6 +55,6 @@ export default async function serverRenderItems(query: ItemServerQuery) {
     ]
   }
   return {
-    props: { items: Items }
+    props: { items: Items as ItemWithCollectionAndUserAndKeywords[] }
   }
 }
