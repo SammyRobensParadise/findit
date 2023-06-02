@@ -24,11 +24,10 @@ local-migrations:
 	dotenv -e .env.local -- npx prisma migrate dev
 
 prod-migrations:
-	include .env.prod
-	export
-	@echo "Applying migrations to producting"
-	dotenv -e .env.prod -- npx prisma migrate reset --force
-	data
+	@echo "Applying migrations to production"
+	dotenv -e .env.prod -- npx prisma migrate deploy
+
+
 
 studio:
 	dotenv -e .env.local -- npx prisma studio
