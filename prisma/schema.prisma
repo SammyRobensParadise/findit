@@ -3,11 +3,11 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
+  previewFeatures = ["fullTextSearch", "filteredRelationCount"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -22,10 +22,6 @@ model Item {
   userId       String?
   Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   collectionId String?
-
-  @@fulltext([name])
-  @@fulltext([description])
-  @@fulltext([name, description])
 }
 
 model Keyword {
@@ -35,8 +31,6 @@ model Keyword {
   itemId       Int?
   Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   collectionId String?
-
-  @@fulltext([name])
 }
 
 model Collection {
@@ -59,6 +53,4 @@ model User {
   createdAt    DateTime     @default(now()) @map(name: "created_at")
   updatedAt    DateTime     @default(now()) @map(name: "updated_at")
   collections  Collection[]
-
-  @@fulltext([name])
 }

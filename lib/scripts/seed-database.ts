@@ -132,7 +132,6 @@ async function createCollections({
 
     await Promise.all(
       mappedKeywords.map(async (keyword) => {
-        console.log(keywords)
         const ref = refTable.find((ref) => ref.keywordId === keyword.id)
         if (ref) {
           try {
