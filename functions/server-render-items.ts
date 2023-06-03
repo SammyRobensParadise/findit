@@ -34,7 +34,7 @@ export default async function serverRenderItems(query: ItemServerQuery) {
       )
     ]
   }
-  if (text.length) {
+  if (text?.length) {
     const textSearchItems = await prisma.item.findMany({
       where: {
         description: { search: text },
