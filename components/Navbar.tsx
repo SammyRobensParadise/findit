@@ -1,6 +1,15 @@
 import { UserWithCollections } from '@/types'
 import { useUser } from '@clerk/nextjs'
-import { Avatar, Box, Button, DropButton, Header, Text } from 'grommet'
+import {
+  Avatar,
+  Box,
+  Button,
+  DropButton,
+  Header,
+  Text,
+  ResponsiveContext,
+  Menu
+} from 'grommet'
 import { useClerk } from '@clerk/clerk-react'
 import Link from 'next/link'
 import { DocumentAdd } from '@carbon/icons-react'
@@ -47,6 +56,9 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
         >
           {isLoaded && <Avatar src={clerkUser?.profileImageUrl} size="small" />}
         </DropButton>
+        <ResponsiveContext.Consumer>
+          {(size) => size === 'small' && <Menu items={[]}></Menu>}
+        </ResponsiveContext.Consumer>
       </Box>
     </Header>
   )
