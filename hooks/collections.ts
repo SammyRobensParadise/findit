@@ -53,5 +53,22 @@ export function useCollections({ userId }: { userId: string }) {
     return response
   }
 
-  return { collections: data?.collections, error, create, remove }
+  async function bulkExport({ collectionId }: { collectionId: string }) {
+    const res = await fetch(`/api/collections/${collectionId}/export`, {
+      method: 'POST',
+      body: JSON.stringify({ data: { userId, collectionId } })
+    })
+
+    const response = await res.json()
+    if (response.message === 'success') {
+      toast.success(
+        `Collection: ${response.collection.name} available to download`
+      )
+    } else {
+      toast.error('Unable to Export Collection')
+    }
+    return response
+  }
+
+  return { collections: data?.collections, error, create, remove, bulkExport }
 }

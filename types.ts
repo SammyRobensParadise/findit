@@ -36,3 +36,14 @@ export type ItemServerQuery = {
   keywords: string | string[]
   text: string
 }
+
+export type ExportableItem = {
+  name: string
+  description: string | null
+  id: number
+  keywords: string
+  collection: string | undefined
+  collectionId: string | undefined
+  createdAt: Date
+  updatedAt: Date
+}
