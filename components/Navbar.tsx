@@ -12,10 +12,18 @@ import {
 } from 'grommet'
 import { useClerk } from '@clerk/clerk-react'
 import Link from 'next/link'
-import { DocumentAdd } from '@carbon/icons-react'
+import {
+  DocumentAdd,
+  Search,
+  Menu as MenuIcon,
+  Book,
+  Export
+} from '@carbon/icons-react'
+import { useRouter } from 'next/router'
 
 export default function Navbar({ user }: { user: UserWithCollections }) {
   const { isLoaded, user: clerkUser } = useUser()
+  const router = useRouter()
   const { signOut } = useClerk()
   return (
     <Header
@@ -57,7 +65,55 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
           {isLoaded && <Avatar src={clerkUser?.profileImageUrl} size="small" />}
         </DropButton>
         <ResponsiveContext.Consumer>
-          {(size) => size === 'small' && <Menu items={[]}></Menu>}
+          {(size) =>
+            size === 'small' && (
+              <Menu
+                dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                icon={<MenuIcon size={24} />}
+                items={[
+                  {
+                    label: (
+                      <Box pad="small">
+                        <Text>Search Items</Text>
+                      </Box>
+                    ),
+                    icon: (
+                      <Box pad="small">
+                        <Search size={24} />
+                      </Box>
+                    ),
+                    onClick: () => router.push('/search')
+                  },
+                  {
+                    label: (
+                      <Box pad="small">
+                        <Text>Collections</Text>
+                      </Box>
+                    ),
+                    icon: (
+                      <Box pad="small">
+                        <Book size={24} />
+                      </Box>
+                    ),
+                    onClick: () => router.push('/collections')
+                  },
+                  {
+                    label: (
+                      <Box pad="small">
+                        <Text>Export</Text>
+                      </Box>
+                    ),
+                    icon: (
+                      <Box pad="small">
+                        <Export size={24} />
+                      </Box>
+                    ),
+                    onClick: () => router.push('/export')
+                  }
+                ]}
+              ></Menu>
+            )
+          }
         </ResponsiveContext.Consumer>
       </Box>
     </Header>

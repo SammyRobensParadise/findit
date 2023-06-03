@@ -116,3 +116,7 @@ kbd {
 button[role='menuitem'] {
   opacity: 1;
 }
+
+th {
+  backgroud: #fff;
+}

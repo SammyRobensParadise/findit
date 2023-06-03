@@ -10,13 +10,14 @@ import {
 } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Button, DataTable, Text } from 'grommet'
+import { Box, Button, DataTable, ResponsiveContext, Text } from 'grommet'
 import serverRenderItems from '@/functions/server-render-items'
 import { Collection } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { useRouter } from 'next/router'
 import { Csv } from '@carbon/icons-react'
 import { CSVLink } from 'react-csv'
+import { useContext } from 'react'
 
 export default function Results(props: {
   user: UserWithCollections
@@ -32,6 +33,7 @@ export default function Results(props: {
   } = props
 
   const router = useRouter()
+  const size = useContext(ResponsiveContext)
 
   if (!items.length) {
     return (
@@ -81,7 +83,7 @@ export default function Results(props: {
               <Button label="Download as CSV" icon={<Csv size={16} />} />
             </CSVLink>
           </Box>
-          <Box fill="vertical" border={{ side: 'bottom' }}>
+          <Box fill="vertical" border={{ side: 'bottom' }} overflow="auto">
             {items.length && (
               <DataTable
                 a11yTitle="Items Table"
@@ -100,8 +102,10 @@ export default function Results(props: {
                   {
                     property: 'name',
                     header: <Text size="small">Name</Text>,
+                    size: size === 'small' ? 'small' : 'medium',
                     primary: true,
                     search: true,
+                    pin: true,
                     align: 'start',
                     render: ({ name }) => <Text size="small">{name}</Text>,
                     footer: (
@@ -112,6 +116,7 @@ export default function Results(props: {
                   },
                   {
                     property: 'description',
+                    size: size === 'small' ? 'small' : 'medium',
                     header: <Text size="small">Description</Text>,
                     search: true,
                     render: ({ description }) => (
