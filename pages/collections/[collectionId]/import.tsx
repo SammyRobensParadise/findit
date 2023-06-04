@@ -12,7 +12,13 @@ import {
   Layer,
   FormField,
   Form,
-  Spinner
+  Spinner,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  TableBody,
+  Card
 } from 'grommet'
 import Papa from 'papaparse'
 
@@ -98,65 +104,128 @@ export default function Collections(props: { user: UserWithCollections }) {
       </Head>
       <Page user={user}>
         <Box gap="medium">
-          <Text> Import Items Into Collection: {collection?.name}</Text>
+          <Text>Import Items Into Collection: {collection?.name}</Text>
+          <Text size="small">
+            CSV files must have the the fields:{' '}
+            {'"name", "description", and "keywords"'} to be imported. See the
+            following example:
+          </Text>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell scope="col" border="bottom" size="small">
+                  <Text size="small">
+                    <b>name</b>
+                  </Text>
+                </TableCell>
+                <TableCell scope="col" border="bottom" size="small">
+                  <Text size="small">
+                    <b>description</b>
+                  </Text>
+                </TableCell>
+                <TableCell scope="col" border="bottom">
+                  <Text size="small">
+                    <b>keywords</b>
+                  </Text>
+                </TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell scope="row">
+                  <Text size="small">Item 1</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">Description for Item 1</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">keyword1,keyword2,keyword3</Text>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell scope="row">
+                  <Text size="small">Item 2</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">Description for Item 1</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">keyword4,keyword5,keyword6</Text>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell scope="row">
+                  <Text size="small">...</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">...</Text>
+                </TableCell>
+                <TableCell>
+                  <Text size="small">...</Text>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
           <Box>
             {collection && (
-              <Box gap="small">
-                <Form onSubmit={handleSubmit}>
-                  <FormField
-                    label="Upload CSV"
-                    name="file-input"
-                    htmlFor="file-input"
-                  >
-                    <FileInput
-                      accept=".csv"
+              <Card pad="medium" border>
+                <Box gap="small">
+                  <Form onSubmit={handleSubmit}>
+                    <FormField
+                      label="Upload CSV"
                       name="file-input"
-                      id="file-input"
-                      onChange={validateFile}
-                      confirmRemove={({ onConfirm, onCancel }) => (
-                        <Layer onClickOutside={onCancel} onEsc={onCancel}>
-                          <Box pad="medium" gap="medium">
-                            Are you sure you want to delete this file?
-                            <Box
-                              direction="row"
-                              align="center"
-                              justify="end"
-                              gap="small"
-                            >
-                              <Button label="Cancel" onClick={onCancel} />
-                              <Button
-                                label="Delete file"
-                                onClick={onConfirm}
-                                primary
-                              />
+                      htmlFor="file-input"
+                    >
+                      <FileInput
+                        accept=".csv"
+                        name="file-input"
+                        id="file-input"
+                        onChange={validateFile}
+                        confirmRemove={({ onConfirm, onCancel }) => (
+                          <Layer onClickOutside={onCancel} onEsc={onCancel}>
+                            <Box pad="medium" gap="medium">
+                              Are you sure you want to delete this file?
+                              <Box
+                                direction="row"
+                                align="center"
+                                justify="end"
+                                gap="small"
+                              >
+                                <Button label="Cancel" onClick={onCancel} />
+                                <Button
+                                  label="Delete file"
+                                  onClick={onConfirm}
+                                  primary
+                                />
+                              </Box>
                             </Box>
-                          </Box>
-                        </Layer>
-                      )}
+                          </Layer>
+                        )}
+                      />
+                    </FormField>
+                    {validatingFile && (
+                      <Box align="center" pad="small" gap="small">
+                        <Text>Validating File...</Text>
+                        <Spinner size="large" />
+                      </Box>
+                    )}
+                    {validationError && (
+                      <Box align="center" pad="medium" gap="medium">
+                        <Text color="status-critical">
+                          Invalid File Format. The following CSV fields are
+                          required: <b>name</b>, <b>description</b>,{' '}
+                          <b>keywords</b>.
+                        </Text>
+                      </Box>
+                    )}
+                    <Button
+                      label="Submit"
+                      type="submit"
+                      disabled={!uploadData.length || validationError}
                     />
-                  </FormField>
-                  {validatingFile && (
-                    <Box align="center" pad="small" gap="small">
-                      <Text>Validating File...</Text>
-                      <Spinner size="large" />
-                    </Box>
-                  )}
-                  {validationError && (
-                    <Box align="center" pad="medium" gap="medium">
-                      <Text color="status-critical">
-                        Invalid File Format. The following CSV fields are
-                        required: <b>name</b>, <b>description</b>,{' '}
-                        <b>keywords</b>.
-                      </Text>
-                    </Box>
-                  )}
-                  <Button
-                    label="Submit"
-                    type="submit"
-                    disabled={!uploadData.length && validationError}
-                  />
-                </Form>
-              </Box>
+                  </Form>
+                </Box>
+              </Card>
             )}
           </Box>
         </Box>
