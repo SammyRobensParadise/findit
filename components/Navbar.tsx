@@ -62,7 +62,7 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
             </Box>
           }
         >
-          {isLoaded && <Avatar src={clerkUser?.profileImageUrl} size="small" />}
+          {isLoaded && <Avatar src={clerkUser?.imageUrl} size="small" />}
         </DropButton>
         <ResponsiveContext.Consumer>
           {(size) =>

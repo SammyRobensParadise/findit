@@ -15,9 +15,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return res
-      .status(405)
-      .json({ message: 'Method Not Allowed', keyword: null })
+    return res.status(405).json({ message: 'Method Not Allowed', user: null })
   }
   try {
     const body = JSON.parse(req.body)
