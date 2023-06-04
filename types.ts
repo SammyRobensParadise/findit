@@ -1,4 +1,4 @@
-import { UserJSON } from '@clerk/nextjs/dist/api'
+import { UserJSON } from '@clerk/nextjs/dist/types/server'
 import { Collection, Item, Keyword, User } from '@prisma/client'
 
 export type __clerk_ssr_state = {

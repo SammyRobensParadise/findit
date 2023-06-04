@@ -1,9 +1,9 @@
 import prisma from '../prisma'
 import * as dotenv from 'dotenv'
-import { UserJSON } from '@clerk/nextjs/dist/api'
 import csv from 'csvtojson'
 import { User, Keyword as PrismaKeyword } from '@prisma/client'
 import generateUserFromClerk from '@/functions/generate-user'
+import { UserJSON } from '@clerk/nextjs/dist/types/server'
 
 dotenv.config()
 
