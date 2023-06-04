@@ -10,7 +10,14 @@ import {
 } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Button, DataTable, ResponsiveContext, Text } from 'grommet'
+import {
+  Anchor,
+  Box,
+  Button,
+  DataTable,
+  ResponsiveContext,
+  Text
+} from 'grommet'
 import serverRenderItems from '@/functions/server-render-items'
 import { Collection } from '@prisma/client'
 import prisma from '@/lib/prisma'
@@ -55,7 +62,10 @@ export default function Results(props: {
             <Text>
               No items matched the search criteria. The items you are looking
               for do not exist or have been deleted. If you think this is an
-              error, contact your system administrator.
+              error,{' '}
+              <Anchor href="mailto:srobensparadise@gmail.com?subject=Findit. Item Not Found">
+                contact your system administrator.
+              </Anchor>
             </Text>
           </Box>
         </Page>
