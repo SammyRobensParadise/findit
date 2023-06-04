@@ -63,7 +63,9 @@ export default function Results(props: {
               No items matched the search criteria. The items you are looking
               for do not exist or have been deleted. If you think this is an
               error,{' '}
-              <Anchor href="mailto:srobensparadise@gmail.com?subject=Findit. Item Not Found">
+              <Anchor
+                href={`mailto:srobensparadise@gmail.com?subject=Findit. Item Not Found&body=Item Not found at URL: ${window.location.href}`}
+              >
                 contact your system administrator.
               </Anchor>
             </Text>
