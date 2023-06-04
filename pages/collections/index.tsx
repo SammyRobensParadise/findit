@@ -55,9 +55,9 @@ export default function Collections(props: { user: UserWithCollections }) {
             icon={<Add size={16} />}
           />
           <Box fill="horizontal">
-            <Grid columns={{ count: 3, size: 'auto' }} gap="small">
+            <Grid columns={size !== 'small' ? '1/2' : '100%'} gap="small">
               {user.collections.map((collection, index) => (
-                <Card key={index} border width="100%">
+                <Card key={index} border>
                   <CardHeader pad="small">
                     <Anchor href={`/collections/${collection.id}`}>
                       {collection.name}
@@ -107,11 +107,12 @@ export default function Collections(props: { user: UserWithCollections }) {
                   </CardHeader>
                   <CardBody gap="small" pad="small">
                     <Text size="small">{collection.description}</Text>
-                    <Tag
-                      name="Items"
-                      value={`${collection._count.items}`}
-                      size="small"
-                    />
+                    <Box direction="row" gap="small">
+                      <Text size="small">Items:</Text>
+                      <Text size="small">
+                        <b>{collection._count.items}</b>
+                      </Text>
+                    </Box>
                   </CardBody>
                   <CardFooter border={{ side: 'top' }} pad="small">
                     <Link
