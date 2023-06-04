@@ -35,10 +35,12 @@ export default async function serverRenderItems(query: ItemServerQuery) {
     ]
   }
   if (text?.length) {
+    // if postgres change text to search string
+    const searchString = text.replace(' ', ' | ')
     const textSearchItems = await prisma.item.findMany({
       where: {
-        description: { search: text },
-        name: { search: text },
+        description: { search: searchString },
+        name: { search: searchString },
         collectionId: query.collectionId
       },
       include: {
