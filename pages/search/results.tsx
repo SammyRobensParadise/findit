@@ -48,10 +48,16 @@ export default function Results(props: {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Page user={user}>
-          <Text>
-            The items you are looking for does not exist or has been deleted. If
-            you think this is an error, contact your system administrator. 😢
-          </Text>
+          <Box gap="medium">
+            <Text color="status-critical" size="large">
+              <b>No Items Found</b>
+            </Text>
+            <Text>
+              No items matched the search criteria. The items you are looking
+              for do not exist or have been deleted. If you think this is an
+              error, contact your system administrator.
+            </Text>
+          </Box>
         </Page>
       </>
     )

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Box } from 'grommet'
+import { Box, Spinner } from 'grommet'
 import { SignedOut, SignedIn } from '@clerk/nextjs'
 import React from 'react'
 import { useEffect } from 'react'
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 const Suspense = () => {
   const router = useRouter()
   useEffect(() => {
-    router.push('/search')
+    router.replace('/search')
   }, [router])
 
   return (
@@ -41,6 +41,9 @@ const Suspense = () => {
         <meta name="description" content="Findit. Your homepage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Box align="center">
+        <Spinner size="xlarge" />
+      </Box>
     </div>
   )
 }
