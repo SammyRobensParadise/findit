@@ -58,7 +58,10 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
             <Box pad="medium" gap="small">
               <Text>{user.name}</Text>
               <Text size="small">{user.email}</Text>
-              <Button onClick={signOut} label="Sign out"></Button>
+              <Button
+                onClick={() => signOut().then(() => {})}
+                label="Sign out"
+              ></Button>
             </Box>
           }
         >
