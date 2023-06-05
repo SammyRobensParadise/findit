@@ -168,7 +168,7 @@ export default function Collections(props: { user: UserWithCollections }) {
           </Table>
           <Box>
             {collection && (
-              <Card pad="medium" border>
+              <Card pad="medium" border animation="zoomIn">
                 <Box gap="small">
                   <Form onSubmit={handleSubmit}>
                     <FormField

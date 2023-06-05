@@ -51,7 +51,7 @@ export default function Collections(props: { user: UserWithCollections }) {
           <Text>Collection: {collection?.name}</Text>
           <Box>
             {collection && (
-              <Card>
+              <Card border animation="zoomIn">
                 <CardHeader pad="small">
                   <Text>{collection.name}</Text>
                   <Menu

@@ -139,7 +139,7 @@ export default function NewCollection(props: { user: UserWithCollections }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Page user={user}>
-        <Box gap="medium">
+        <Box gap="medium" animation="fadeIn">
           <Text>New Collection</Text>
           <Box>
             <Form onSubmit={handleSubmit}>

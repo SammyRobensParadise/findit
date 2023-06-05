@@ -101,7 +101,12 @@ export default function Results(props: {
               <Button label="Download as CSV" icon={<Csv size={16} />} />
             </CSVLink>
           </Box>
-          <Box fill="vertical" border={{ side: 'bottom' }} overflow="auto">
+          <Box
+            fill="vertical"
+            border={{ side: 'bottom' }}
+            overflow="auto"
+            animation="fadeIn"
+          >
             {items.length && (
               <DataTable
                 a11yTitle="Items Table"

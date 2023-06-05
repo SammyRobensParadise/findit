@@ -81,7 +81,7 @@ export default function Results(props: {
       </Head>
       <Page user={user}>
         <Box gap="medium" flex="grow" pad="small">
-          <Box direction="row" gap="medium" pad="small">
+          <Box direction="row" gap="medium" pad="small" animation="fadeIn">
             <Button
               label="Print"
               onClick={handlePrint}
@@ -100,7 +100,7 @@ export default function Results(props: {
               onClick={handleDelete}
             />
           </Box>
-          <Card>
+          <Card animation="fadeIn">
             <Box gap="medium" pad="medium" ref={componentRef}>
               <Box gap="small">
                 <Text size="small">Item Name:</Text>

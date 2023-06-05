@@ -57,7 +57,7 @@ export default function Collections(props: { user: UserWithCollections }) {
           <Box fill="horizontal">
             <Grid columns={size !== 'small' ? '1/2' : '100%'} gap="small">
               {user.collections.map((collection, index) => (
-                <Card key={index} border>
+                <Card key={index} border animation="zoomIn">
                   <CardHeader pad="small">
                     <Anchor href={`/collections/${collection.id}`}>
                       {collection.name}

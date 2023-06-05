@@ -87,34 +87,41 @@ export default function SearchForm({
           value={collection}
         />
       </FormField>
-      <Box>
+      <Box animation="fadeIn">
         {!!keywords?.length ? (
-          <FormField name="keywords" label="Keywords" htmlFor="keywords">
-            <Box pad="small" direction="row" gap="small">
-              {keywordsValues.map((value: Keyword) => (
-                <Box key={value.id} background="light-3" round>
-                  <Tag size="small" name="Keyword" value={value.name} />
-                </Box>
-              ))}
-            </Box>
-            <SelectMultiple
-              name="keywords"
-              id="keywords"
-              showSelectedInline
-              size="medium"
-              placeholder="Select multiple options"
-              value={keywordsValues}
-              options={keywordsOptions ?? []}
-              onChange={({ value: nextValue }) => setKeywordsValues(nextValue)}
-              onClose={() => setKeywordOptions(keywords)}
-              onSearch={(text) => {
-                const escapedText = text.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
-                const exp = new RegExp(escapedText, 'i')
-                const newOptions = keywords?.filter((o) => exp.test(o.name))
-                setKeywordOptions(newOptions)
-              }}
-            />
-          </FormField>
+          <Box animation="slideDown">
+            <FormField name="keywords" label="Keywords" htmlFor="keywords">
+              <Box pad="small" direction="row" gap="small">
+                {keywordsValues.map((value: Keyword) => (
+                  <Box key={value.id} background="light-3" round>
+                    <Tag size="small" name="Keyword" value={value.name} />
+                  </Box>
+                ))}
+              </Box>
+              <SelectMultiple
+                name="keywords"
+                id="keywords"
+                showSelectedInline
+                size="medium"
+                placeholder="Select multiple options"
+                value={keywordsValues}
+                options={keywordsOptions ?? []}
+                onChange={({ value: nextValue }) =>
+                  setKeywordsValues(nextValue)
+                }
+                onClose={() => setKeywordOptions(keywords)}
+                onSearch={(text) => {
+                  const escapedText = text.replace(
+                    /[-\\^$*+?.()|[\]{}]/g,
+                    '\\$&'
+                  )
+                  const exp = new RegExp(escapedText, 'i')
+                  const newOptions = keywords?.filter((o) => exp.test(o.name))
+                  setKeywordOptions(newOptions)
+                }}
+              />
+            </FormField>
+          </Box>
         ) : (
           <>
             {!!collection && (
@@ -135,7 +142,7 @@ export default function SearchForm({
             />
           </FormField>
         )}
-        <Box direction="row" gap="medium">
+        <Box direction="row" gap="medium" animation="fadeIn">
           <Button type="reset" label="Reset Form" />
           <Button type="submit" primary label="Search" />
         </Box>
