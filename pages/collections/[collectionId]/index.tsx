@@ -19,6 +19,7 @@ import {
 import Link from 'next/link'
 import {
   DocumentAdd,
+  Edit,
   ImportExport,
   OverflowMenuVertical,
   Search,
@@ -55,8 +56,23 @@ export default function Collections(props: { user: UserWithCollections }) {
                 <CardHeader pad="small">
                   <Text>{collection.name}</Text>
                   <Menu
+                    dropProps={{ align: { top: 'bottom', right: 'right' } }}
                     icon={<OverflowMenuVertical size={16} />}
                     items={[
+                      {
+                        label: (
+                          <Tip
+                            content={<Text size="small">Edit Collection</Text>}
+                          >
+                            <Box pad={{ left: 'small' }}>
+                              <Text>Edit</Text>
+                            </Box>
+                          </Tip>
+                        ),
+                        icon: <Edit size={20} />,
+                        onClick: async () =>
+                          router.push(`/collections/${collection.id}/edit`)
+                      },
                       {
                         label: (
                           <Tip
@@ -66,7 +82,9 @@ export default function Collections(props: { user: UserWithCollections }) {
                               </Text>
                             }
                           >
-                            <Text>Delete</Text>
+                            <Box pad={{ left: 'small' }}>
+                              <Text>Delete</Text>
+                            </Box>
                           </Tip>
                         ),
                         icon: <TrashCan size={20} color="#FF4040" />,

@@ -1,6 +1,6 @@
 import { Collection } from '@prisma/client'
 import { toast } from 'react-toastify'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 const fetcher = <T>(...arg: [string, Record<string, any>]): Promise<T> =>
   fetch(...arg).then((res) => res.json())
@@ -9,7 +9,7 @@ export function useCollections({ userId }: { userId: string }) {
   const { data, error } = useSWR<{
     message: string
     collections: Collection[]
-  }>(`/api/${userId}/collections`, fetcher, {
+  }>(`/api/user/${userId}/collections`, fetcher, {
     revalidateIfStale: true,
     revalidateOnFocus: true,
     revalidateOnReconnect: false
@@ -35,6 +35,33 @@ export function useCollections({ userId }: { userId: string }) {
       toast.success(`Created Collection ${response.collection.name}`)
     } else {
       toast.error('Unable to Create Collection')
+    }
+    return response
+  }
+
+  async function update({
+    name,
+    description,
+    collectionId
+  }: {
+    name: string
+    description: string
+    collectionId: string
+  }) {
+    const res = await fetch(`/api/collections/${collectionId}/update`, {
+      method: 'POST',
+      body: JSON.stringify({
+        data: { name, description, userId, collectionId }
+      })
+    })
+
+    const response = await res.json()
+
+    if (response.message === 'success') {
+      mutate(`/api/user/${userId}/collections`)
+      toast.success(`Updated Collection ${response.collection.name}`)
+    } else {
+      toast.error('Unable to update collection')
     }
     return response
   }
@@ -70,5 +97,12 @@ export function useCollections({ userId }: { userId: string }) {
     return response
   }
 
-  return { collections: data?.collections, error, create, remove, bulkExport }
+  return {
+    collections: data?.collections,
+    error,
+    create,
+    remove,
+    bulkExport,
+    update
+  }
 }
