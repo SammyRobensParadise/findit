@@ -1,4 +1,4 @@
-import generateUserFromClerk from '@/functions/generate-user'
+import { generateUserFromClerkAPI } from '@/functions/generate-user'
 import prisma from '@/lib/prisma'
 import { UserJSON } from '@clerk/nextjs/server'
 import { User } from '@prisma/client'
@@ -26,7 +26,7 @@ export default async function handler(
     if (existingUser) {
       return res.status(200).json({ message: 'success', user: existingUser })
     } else {
-      const databaseUser: User = generateUserFromClerk(user)
+      const databaseUser: User = generateUserFromClerkAPI(user)
       const dbuser = await prisma.user.create({ data: { ...databaseUser } })
       return res.status(200).json({ message: 'success', user: dbuser })
     }

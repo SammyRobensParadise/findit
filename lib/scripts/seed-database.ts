@@ -2,7 +2,7 @@ import prisma from '../prisma'
 import * as dotenv from 'dotenv'
 import csv from 'csvtojson'
 import { User, Keyword as PrismaKeyword } from '@prisma/client'
-import generateUserFromClerk from '@/functions/generate-user'
+import { generateUserFromClerkAPI } from '@/functions/generate-user'
 import { UserJSON } from '@clerk/nextjs/dist/types/server'
 
 dotenv.config()
@@ -163,7 +163,7 @@ getUsers()
     console.info(clr, `Found ${users.length} Users`)
     Promise.all(
       users.map(async (user: UserJSON, idx) => {
-        const databaseUser: User = generateUserFromClerk(user)
+        const databaseUser: User = generateUserFromClerkAPI(user)
         const dbuser = await prisma.user.create({ data: { ...databaseUser } })
         console.info(clr, 'Created User:')
         console.table(dbuser)
