@@ -34,7 +34,7 @@ export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
   const { remove, users } = useCollections({ userId: user.id })
   const router = useRouter()
-  const [collectionUsrs, setUsers] = useState<User[]>([])
+  const [collectionUsers, setUsers] = useState<User[]>([])
 
   const { collectionId } = router.query
 
@@ -45,13 +45,12 @@ export default function Collections(props: { user: UserWithCollections }) {
   useEffect(() => {
     async function fetchUsers() {
       if (typeof collectionId === 'string') {
-        const collectionUsers = await users({ collectionId })
-        console.log(collectionUsers)
+        const usrs = await users({ collectionId })
+        setUsers(() => [...usrs.users])
       }
     }
     fetchUsers()
   }, [collectionId, users])
-
   return (
     <>
       <Head>
