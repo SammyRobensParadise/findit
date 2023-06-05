@@ -119,7 +119,6 @@ export default function NewCollection(props: { user: UserWithCollections }) {
     setSelectedEmails([...selectedEmails, tag])
 
   async function handleSubmit() {
-    console.log(selectedEmails)
     const response = await create({
       name: collectionName,
       description: collectionDescription,

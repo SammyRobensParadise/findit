@@ -12,35 +12,133 @@ import {
   CardBody,
   CardFooter,
   Button,
-  Tag,
+  Tag as GrommetTag,
   Menu,
-  Tip
+  Tip,
+  Layer,
+  TextInput,
+  Keyboard
 } from 'grommet'
 import Link from 'next/link'
 import {
+  Close,
   DocumentAdd,
   Edit,
   ImportExport,
   OverflowMenuVertical,
   Search,
+  Share,
   TrashCan
 } from '@carbon/icons-react'
 import { useCollections } from '@/hooks/collections'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { User } from '@prisma/client'
+import { validateEmail } from '@/functions/validate-email'
+
+const Tag = ({ children, onRemove, ...rest }: any) => {
+  const tag = (
+    <Box
+      direction="row"
+      align="center"
+      background="neutral-3"
+      pad={{ horizontal: 'xsmall', vertical: 'xxsmall' }}
+      margin={{ vertical: 'xxsmall' }}
+      round="medium"
+      {...rest}
+    >
+      <Text size="xsmall" margin={{ right: 'xxsmall' }}>
+        {children}
+      </Text>
+      {onRemove && <Close size={16} />}
+    </Box>
+  )
+
+  if (onRemove) {
+    return <Button onClick={onRemove}>{tag}</Button>
+  }
+  return tag
+}
+
+const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
+  const [currentTag, setCurrentTag] = useState('')
+  const boxRef = useRef(null)
+
+  const updateCurrentTag = (event: any) => {
+    setCurrentTag(event.target.value)
+    if (onChange) {
+      onChange(event)
+    }
+  }
+
+  const onAddTag = (tag: string) => {
+    if (onAdd) {
+      onAdd(tag)
+    }
+  }
+
+  const onSpace = () => {
+    if (currentTag.length) {
+      onAddTag(currentTag)
+      setCurrentTag('')
+    }
+  }
+
+  const renderValue = () =>
+    value.map((v: any, index: number) => (
+      <Tag
+        margin="xxsmall"
+        key={`${v}${index + 0}`}
+        onRemove={() => onRemove(v)}
+      >
+        {v}
+      </Tag>
+    ))
+
+  return (
+    <Keyboard onSpace={onSpace}>
+      <Box direction="row" pad={{ horizontal: 'xsmall' }} ref={boxRef} wrap>
+        {value.length > 0 && renderValue()}
+        <Box flex>
+          <TextInput
+            plain
+            type="search"
+            dropTarget={boxRef.current}
+            {...rest}
+            onChange={updateCurrentTag}
+            value={currentTag}
+            onSuggestionSelect={(event) => onAddTag(event.suggestion)}
+          />
+        </Box>
+      </Box>
+    </Keyboard>
+  )
+}
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
   const { remove, users } = useCollections({ userId: user.id })
   const router = useRouter()
   const [collectionUsers, setUsers] = useState<User[]>([])
+  const [showShare, setShowShare] = useState(false)
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([])
 
   const { collectionId } = router.query
 
   const collection = user.collections.find(
     (collection) => collection.id === collectionId
   )
+
+  const onRemoveEmailTag = (tag: string) => {
+    const removeIndex = selectedEmails.indexOf(tag)
+    const newTags = [...selectedEmails]
+    if (removeIndex >= 0) {
+      newTags.splice(removeIndex, 1)
+    }
+    setSelectedEmails(newTags)
+  }
+  const onAddEmailTag = (tag: string) =>
+    setSelectedEmails([...selectedEmails, tag])
 
   useEffect(() => {
     async function fetchUsers() {
@@ -60,6 +158,43 @@ export default function Collections(props: { user: UserWithCollections }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Page user={user}>
+        {showShare && (
+          <Layer
+            position="center"
+            onEsc={() => setShowShare(false)}
+            onClickOutside={() => setShowShare(false)}
+          >
+            <Box pad="medium" gap="small" width="large">
+              <Text margin="none">Share {collection?.name}</Text>
+              <Text size="small">
+                Share collection via email. Enter multiple emails separated by a{' '}
+                <kbd>space</kbd>.
+              </Text>
+              <TagInput
+                placeholder="Enter emails"
+                value={selectedEmails}
+                onRemove={onRemoveEmailTag}
+                onAdd={onAddEmailTag}
+              />
+              <Box
+                as="footer"
+                gap="small"
+                direction="row"
+                align="center"
+                justify="end"
+                pad={{ top: 'medium', bottom: 'small' }}
+              >
+                <Button
+                  label="Cancel"
+                  onClick={() => setShowShare(false)}
+                  primary
+                  color="status-critical"
+                />
+                <Button label="Share" />
+              </Box>
+            </Box>
+          </Layer>
+        )}
         <Box gap="medium">
           <Text>Collection: {collection?.name}</Text>
           <Box>
@@ -114,11 +249,27 @@ export default function Collections(props: { user: UserWithCollections }) {
                 </CardHeader>
                 <CardBody gap="small" pad="small">
                   <Text size="small">{collection.description}</Text>
-                  <Tag
+                  <GrommetTag
                     name="Items"
                     value={`${collection._count.items}`}
                     size="small"
                   />
+                  <Text size="small">Users:</Text>
+                  <Box direction="column" gap="small">
+                    {!!collectionUsers &&
+                      collectionUsers.map((user) => (
+                        <Box
+                          key={user.email}
+                          round="medium"
+                          border
+                          pad="small"
+                          flex="shrink"
+                          style={{ width: 'fit-content' }}
+                        >
+                          <Text size="small">{user.email}</Text>
+                        </Box>
+                      ))}
+                  </Box>
                 </CardBody>
                 <CardFooter pad="small">
                   <Link href={`/search?collectionId=${collection.id}`} passHref>
@@ -129,6 +280,13 @@ export default function Collections(props: { user: UserWithCollections }) {
                       color="neutral-2"
                     />
                   </Link>
+                  <Button
+                    label="Share Collection"
+                    icon={<Share size={16} />}
+                    plain
+                    color="neutral-2"
+                    onClick={() => setShowShare(true)}
+                  />
                   <Link
                     href={`/item/new?collectionId=${collection.id}`}
                     passHref

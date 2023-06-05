@@ -24,7 +24,6 @@ export default async function handler(
   }
   try {
     const { userId, collectionId } = req.query
-    console.log(userId, collectionId)
     if (typeof userId === 'string' && typeof collectionId === 'string') {
       const user = await prisma.user.findUnique({
         where: { id: userId },

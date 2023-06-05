@@ -65,7 +65,6 @@ export default function Collections(props: { user: UserWithCollections }) {
           data: Partial<Item[]>
         }) => {
           const hasFields: boolean = hasRequiredFields(meta.fields)
-          console.log(data)
           if (!hasFields) {
             setValidationFile(false)
             setValidationError(true)
