@@ -27,17 +27,30 @@ import {
 } from '@carbon/icons-react'
 import { useCollections } from '@/hooks/collections'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { User } from '@prisma/client'
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
-  const { remove } = useCollections({ userId: user.id })
+  const { remove, users } = useCollections({ userId: user.id })
   const router = useRouter()
+  const [collectionUsrs, setUsers] = useState<User[]>([])
 
   const { collectionId } = router.query
 
   const collection = user.collections.find(
     (collection) => collection.id === collectionId
   )
+
+  useEffect(() => {
+    async function fetchUsers() {
+      if (typeof collectionId === 'string') {
+        const collectionUsers = await users({ collectionId })
+        console.log(collectionUsers)
+      }
+    }
+    fetchUsers()
+  }, [collectionId, users])
 
   return (
     <>

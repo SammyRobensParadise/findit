@@ -1,4 +1,4 @@
-import { Collection } from '@prisma/client'
+import { Collection, User } from '@prisma/client'
 import { toast } from 'react-toastify'
 import useSWR, { mutate } from 'swr'
 
@@ -97,12 +97,24 @@ export function useCollections({ userId }: { userId: string }) {
     return response
   }
 
+  async function users({ collectionId }: { collectionId: string }): Promise<{
+    message: string
+    users: User[]
+  }> {
+    const res = await fetch(
+      `/api/collections/${collectionId}/users?userId=${userId}`
+    )
+    const response = await res.json()
+    return response
+  }
+
   return {
     collections: data?.collections,
     error,
     create,
     remove,
     bulkExport,
-    update
+    update,
+    users
   }
 }
