@@ -47,7 +47,7 @@ export default async function handler(
       })
       try {
         if (existingUsers?.length) {
-          users = [...existingUsers]
+          users = [...existingUsers, user]
           existingEmailsInDB = existingUsers.map((user) => user.email)
           nonExistingEmailsInDB = nonExistingEmailsInDB.filter(
             (email) => !existingEmailsInDB.includes(email)
@@ -57,9 +57,7 @@ export default async function handler(
               await prisma.user.update({
                 where: { id: user.id },
                 data: {
-                  collections: {
-                    connect: { id: data.collectionId }
-                  }
+                  collections: { connect: { id: data.collectionId } }
                 }
               })
             })
