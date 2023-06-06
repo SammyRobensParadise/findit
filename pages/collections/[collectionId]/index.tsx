@@ -17,7 +17,8 @@ import {
   Tip,
   Layer,
   TextInput,
-  Keyboard
+  Keyboard,
+  Spinner
 } from 'grommet'
 import Link from 'next/link'
 import {
@@ -34,7 +35,7 @@ import { useCollections } from '@/hooks/collections'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { User } from '@prisma/client'
-import { validateEmail } from '@/functions/validate-email'
+import validateEmail from '@/functions/validate-email'
 
 const Tag = ({ children, onRemove, ...rest }: any) => {
   const tag = (
@@ -78,7 +79,7 @@ const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
   }
 
   const onSpace = () => {
-    if (currentTag.length) {
+    if (currentTag.length && validateEmail(currentTag)) {
       onAddTag(currentTag)
       setCurrentTag('')
     }
@@ -99,10 +100,10 @@ const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
     <Keyboard onSpace={onSpace}>
       <Box direction="row" pad={{ horizontal: 'xsmall' }} ref={boxRef} wrap>
         {value.length > 0 && renderValue()}
-        <Box flex>
+        <Box flex border round="xsmall">
           <TextInput
             plain
-            type="search"
+            type="Email"
             dropTarget={boxRef.current}
             {...rest}
             onChange={updateCurrentTag}
@@ -117,11 +118,12 @@ const TagInput = ({ value = [], onAdd, onChange, onRemove, ...rest }: any) => {
 
 export default function Collections(props: { user: UserWithCollections }) {
   const { user } = props
-  const { remove, users } = useCollections({ userId: user.id })
+  const { remove, users, addUsers } = useCollections({ userId: user.id })
   const router = useRouter()
   const [collectionUsers, setUsers] = useState<User[]>([])
   const [showShare, setShowShare] = useState(false)
   const [selectedEmails, setSelectedEmails] = useState<string[]>([])
+  const [addingUsers, setAddingUsers] = useState(false)
 
   const { collectionId } = router.query
 
@@ -129,7 +131,7 @@ export default function Collections(props: { user: UserWithCollections }) {
     (collection) => collection.id === collectionId
   )
 
-  const onRemoveEmailTag = (tag: string) => {
+  function onRemoveEmailTag(tag: string) {
     const removeIndex = selectedEmails.indexOf(tag)
     const newTags = [...selectedEmails]
     if (removeIndex >= 0) {
@@ -140,6 +142,17 @@ export default function Collections(props: { user: UserWithCollections }) {
   const onAddEmailTag = (tag: string) =>
     setSelectedEmails([...selectedEmails, tag])
 
+  async function handleAddUsers() {
+    if (typeof collectionId === 'string') {
+      setAddingUsers(true)
+      const response = await addUsers({ collectionId, emails: selectedEmails })
+      setAddingUsers(false)
+      if (response.message === 'success') {
+        setShowShare(false)
+      }
+    }
+  }
+
   useEffect(() => {
     async function fetchUsers() {
       if (typeof collectionId === 'string') {
@@ -149,6 +162,7 @@ export default function Collections(props: { user: UserWithCollections }) {
     }
     fetchUsers()
   }, [collectionId, users])
+
   return (
     <>
       <Head>
@@ -170,12 +184,18 @@ export default function Collections(props: { user: UserWithCollections }) {
                 Share collection via email. Enter multiple emails separated by a{' '}
                 <kbd>space</kbd>.
               </Text>
-              <TagInput
-                placeholder="Enter emails"
-                value={selectedEmails}
-                onRemove={onRemoveEmailTag}
-                onAdd={onAddEmailTag}
-              />
+              {addingUsers ? (
+                <Box align="center" pad="small">
+                  <Spinner size="large" />
+                </Box>
+              ) : (
+                <TagInput
+                  placeholder="Enter emails"
+                  value={selectedEmails}
+                  onRemove={onRemoveEmailTag}
+                  onAdd={onAddEmailTag}
+                />
+              )}
               <Box
                 as="footer"
                 gap="small"
@@ -190,7 +210,11 @@ export default function Collections(props: { user: UserWithCollections }) {
                   primary
                   color="status-critical"
                 />
-                <Button label="Share" />
+                <Button
+                  label="Share"
+                  onClick={handleAddUsers}
+                  disabled={!selectedEmails.length || addingUsers}
+                />
               </Box>
             </Box>
           </Layer>

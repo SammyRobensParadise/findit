@@ -108,6 +108,27 @@ export function useCollections({ userId }: { userId: string }) {
     return response
   }
 
+  async function addUsers({
+    collectionId,
+    emails
+  }: {
+    collectionId: string
+    emails: string[]
+  }) {
+    const res = await fetch(`/api/collections/${collectionId}/users/add`, {
+      method: 'POST',
+      body: JSON.stringify({ data: { collectionId, emails, userId } })
+    })
+    const response = await res.json()
+    if (response.message === 'success') {
+      mutate(`/api/collections/${collectionId}/users?userId=${userId}`)
+      toast.success(`Added ${emails.length} users to collection.`)
+    } else {
+      toast.error('Unable to add users.')
+    }
+    return response
+  }
+
   return {
     collections: data?.collections,
     error,
@@ -115,6 +136,7 @@ export function useCollections({ userId }: { userId: string }) {
     remove,
     bulkExport,
     update,
-    users
+    users,
+    addUsers
   }
 }
