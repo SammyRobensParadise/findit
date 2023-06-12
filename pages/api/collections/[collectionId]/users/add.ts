@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as dotenv from 'dotenv'
+import { Collection, User } from '@prisma/client'
 
 interface CreateRequest extends NextApiRequest {
   body: string
@@ -38,26 +39,33 @@ export default async function handler(
     if (hasCollection) {
       let existingEmailsInDB: string[]
       let nonExistingEmailsInDB = data.emails
-      let users: any = []
+      let users: (User & {
+        collections: Collection[]
+      })[] = []
 
       const existingUsers = await prisma.user.findMany({
         where: {
           email: { in: data.emails }
-        }
+        },
+        include: { collections: true }
       })
       try {
-        if (existingUsers?.length) {
+        if (existingUsers && existingUsers?.length && user) {
           users = [...existingUsers, user]
           existingEmailsInDB = existingUsers.map((user) => user.email)
           nonExistingEmailsInDB = nonExistingEmailsInDB.filter(
             (email) => !existingEmailsInDB.includes(email)
           )
           await Promise.all(
-            existingUsers.map(async (user) => {
+            users.map(async (user) => {
+              const existingCollectionIds = user.collections.map((c) => ({
+                id: c.id
+              }))
+              existingCollectionIds.push({ id: data.collectionId })
               await prisma.user.update({
                 where: { id: user.id },
                 data: {
-                  collections: { connect: { id: data.collectionId } }
+                  collections: { connect: existingCollectionIds }
                 }
               })
             })
