@@ -43,8 +43,7 @@ export default function EditItem(props: {
   const itemCollectionMapping: Collection = {
     name: item.Collection.name,
     description: item.Collection.description,
-    id: item.Collection.id,
-    userId: item.Collection.userId
+    id: item.Collection.id
   }
   const [itemCollection, setItemCollection] = useState<Collection>(
     itemCollectionMapping

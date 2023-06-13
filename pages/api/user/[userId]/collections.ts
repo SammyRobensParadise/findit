@@ -15,7 +15,11 @@ export default async function handler(
 
     const collections = await prisma.collection.findMany({
       where: {
-        userId: userId as string
+        users: {
+          some: {
+            id: userId as string
+          }
+        }
       }
     })
     return res.status(200).json({ message: 'success', collections })

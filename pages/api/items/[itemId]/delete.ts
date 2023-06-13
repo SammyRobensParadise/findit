@@ -16,10 +16,12 @@ export default async function handler(
           id: parseInt(itemId)
         },
         include: {
-          Collection: true
+          Collection: { include: { users: true } }
         }
       })
-      if (itemToDelete?.Collection?.userId === userId) {
+      if (
+        itemToDelete?.Collection?.users.map((u) => u.id).includes(`${userId}`)
+      ) {
         const deletedItem = await prisma.item.deleteMany({
           where: {
             id: parseInt(itemId)

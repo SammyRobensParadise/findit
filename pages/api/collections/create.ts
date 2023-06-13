@@ -49,7 +49,7 @@ export default async function handler(
       data: {
         name: data.name,
         description: data.description ?? '',
-        user: {
+        users: {
           connect: { id: data.userId }
         }
       }

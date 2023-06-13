@@ -7,9 +7,9 @@ export async function serverRenderItem(
 ) {
   const item = await prisma.item.findUnique({
     where: { id: itemId },
-    include: { Collection: { include: { user: true } }, keywords: true }
+    include: { Collection: { include: { users: true } }, keywords: true }
   })
-  if (user.id === item?.Collection?.user?.id) {
+  if (item?.Collection?.users?.map((u) => u.id).includes(user.id)) {
     return { props: { item: JSON.parse(JSON.stringify(item)) } }
   }
   return { props: { item: null } }
