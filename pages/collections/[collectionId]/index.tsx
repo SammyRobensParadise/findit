@@ -279,7 +279,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                     size="small"
                   />
                   <Text size="small">Users:</Text>
-                  <Box direction="column" gap="small">
+                  <Box gap="small" direction="row-responsive" wrap>
                     {!!collectionUsers &&
                       collectionUsers.map((user) => (
                         <Box
@@ -287,10 +287,10 @@ export default function Collections(props: { user: UserWithCollections }) {
                           round="medium"
                           border
                           pad="small"
-                          flex="shrink"
                           style={{ width: 'fit-content' }}
+                          margin="8px"
                         >
-                          <Text size="small">
+                          <Text size="small" id={user.id}>
                             <b>
                               {user.firstName} {user.lastName}
                             </b>
