@@ -290,7 +290,12 @@ export default function Collections(props: { user: UserWithCollections }) {
                           flex="shrink"
                           style={{ width: 'fit-content' }}
                         >
-                          <Text size="small">{user.email}</Text>
+                          <Text size="small">
+                            <b>
+                              {user.firstName} {user.lastName}
+                            </b>
+                            , {user.email}
+                          </Text>
                         </Box>
                       ))}
                   </Box>

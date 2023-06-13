@@ -2,8 +2,8 @@ import prisma from '../prisma'
 import * as dotenv from 'dotenv'
 import csv from 'csvtojson'
 import { User, Keyword as PrismaKeyword } from '@prisma/client'
-import { generateUserFromClerkAPI } from '@/functions/generate-user'
 import { UserJSON } from '@clerk/nextjs/dist/types/server'
+import { generateUserFromClerkAPI } from '../../functions/generate-user'
 
 dotenv.config()
 
@@ -102,14 +102,17 @@ async function createCollections({
       }
     })
 
+    console.log(user.id)
     const collection = await prisma.collection.create({
       data: {
         name: 'My Collection',
         description: 'My first collection',
-        user: {
-          connect: {
-            id: user.id
-          }
+        users: {
+          connect: [
+            {
+              id: user.id
+            }
+          ]
         },
         items: {
           createMany: {
@@ -118,6 +121,7 @@ async function createCollections({
         }
       }
     })
+
     const mappedKeywords = keywords.map((keyword) => {
       let newKeyword = keyword as PrismaKeyword
       newKeyword.collectionId = collection.id
