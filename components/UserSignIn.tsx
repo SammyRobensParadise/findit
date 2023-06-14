@@ -1,4 +1,13 @@
-import { Box, Button, Card, CardBody, CardHeader, Footer, Text } from 'grommet'
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Footer,
+  Heading,
+  Text
+} from 'grommet'
 import { useClerk } from '@clerk/nextjs'
 import { FaceAdd, Login } from '@carbon/icons-react'
 import { useRouter } from 'next/router'
@@ -36,14 +45,23 @@ const SignedOutCards = () => {
   }, [newuser, openSignUp])
 
   return (
-    <Card pad="large" gap="medium" align="center" width="medium">
+    <Card
+      pad="large"
+      gap="medium"
+      align="center"
+      width="medium"
+      overflow="scroll"
+    >
       <CardHeader>
-        <Text size="medium" weight="bolder">
-          The Findit App
+        <Text size="large" weight="bold">
+          Findit
         </Text>
       </CardHeader>
-      <CardBody gap="small">
-        <Box align="center" gap="xsmall">
+      <CardBody>
+        <Text textAlign="center">
+          Where you can store and find anything and everything
+        </Text>
+        <Box align="center" gap="small" pad="medium">
           <Button
             icon={<Login size={16} />}
             primary
