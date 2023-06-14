@@ -1,6 +1,8 @@
 import { Box, Button, Card, CardBody, CardHeader, Footer, Text } from 'grommet'
 import { useClerk } from '@clerk/nextjs'
 import { FaceAdd, Login } from '@carbon/icons-react'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function UserSignIn() {
   return (
@@ -23,6 +25,16 @@ export default function UserSignIn() {
 }
 const SignedOutCards = () => {
   const { openSignIn, openSignUp } = useClerk()
+  const router = useRouter()
+
+  const { newuser } = router.query
+
+  useEffect(() => {
+    if (typeof newuser === 'string' && newuser === 'true') {
+      openSignUp()
+    }
+  }, [newuser, openSignUp])
+
   return (
     <Card pad="large" gap="medium" align="center" width="medium">
       <CardHeader>

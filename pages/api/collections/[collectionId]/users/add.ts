@@ -87,7 +87,8 @@ export default async function handler(
                 body: JSON.stringify({
                   email_address: email,
                   public_metadata: { inital_collection_id: data.collectionId },
-                  redirect_url: 'https://findit.vercel.app/collections'
+                  redirect_url:
+                    'https://findit.vercel.app/collections?newuser=true'
                 })
               })
               const response = await res.json()
