@@ -1,21 +1,21 @@
 import {
+  Anchor,
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Footer,
-  Heading,
   Text
 } from 'grommet'
 import { useClerk } from '@clerk/nextjs'
-import { FaceAdd, Login } from '@carbon/icons-react'
+import { FaceAdd, Login, Search } from '@carbon/icons-react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 export default function UserSignIn() {
   return (
-    <Box fill>
+    <Box fill background="neutral-2">
       <Box
         align="center"
         pad="large"
@@ -28,7 +28,10 @@ export default function UserSignIn() {
           <SignedOutCards />
         </Box>
       </Box>
-      <Footer pad="small" justify="center"></Footer>
+      <Footer pad="small" justify="center">
+        Build with love ❤️ by:
+        <Anchor href="https://sammy.world">Sammy Robens-Paradise</Anchor>
+      </Footer>
     </Box>
   )
 }
@@ -51,6 +54,7 @@ const SignedOutCards = () => {
       align="center"
       width="medium"
       overflow="scroll"
+      background="white"
     >
       <CardHeader>
         <Text size="large" weight="bold">
@@ -58,7 +62,7 @@ const SignedOutCards = () => {
         </Text>
       </CardHeader>
       <CardBody>
-        <Text textAlign="center">
+        <Text textAlign="center" size="small">
           Where you can store and find anything and everything
         </Text>
         <Box align="center" gap="small" pad="medium">
