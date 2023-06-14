@@ -9,9 +9,11 @@ import {
   Text
 } from 'grommet'
 import { useClerk } from '@clerk/nextjs'
-import { FaceAdd, Login, Search } from '@carbon/icons-react'
+import { FaceAdd, Login } from '@carbon/icons-react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import Image from 'next/image'
+import ExploreImage from '../public/explore.png'
 
 export default function UserSignIn() {
   return (
@@ -62,6 +64,14 @@ const SignedOutCards = () => {
         </Text>
       </CardHeader>
       <CardBody>
+        <Box align="center" pad="xsmall">
+          <Image
+            src={ExploreImage}
+            height="150"
+            alt="explore Image"
+            id="explore-image"
+          />
+        </Box>
         <Text textAlign="center" size="small">
           Where you can store and find anything and everything
         </Text>
