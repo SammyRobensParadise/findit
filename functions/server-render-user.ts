@@ -31,8 +31,18 @@ export default async function serverRenderUser(state: ClerkState) {
       return { props: { user } }
     }
     const user = generateUserFromClerkSDK(s.user)
+    const hasMetadata = !!s.user.publicMetadata
     const newUser = await prisma.user.create({
-      data: { ...user },
+      data: {
+        ...user,
+        ...(hasMetadata && {
+          collections: {
+            connect: [
+              { id: s.user.publicMetadata.inital_collection_id as string }
+            ]
+          }
+        })
+      },
       include: {
         collections: {
           select: {
