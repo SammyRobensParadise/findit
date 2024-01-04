@@ -22,7 +22,7 @@ import serverRenderItems from '@/functions/server-render-items'
 import { Collection } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { useRouter } from 'next/router'
-import { Csv } from '@carbon/icons-react'
+import { Download } from '@carbon/icons-react'
 import { CSVLink } from 'react-csv'
 import { useContext } from 'react'
 
@@ -98,7 +98,11 @@ export default function Results(props: {
               data={printableItems}
               filename={`item-${items.length}.csv`}
             >
-              <Button label="Download as CSV" icon={<Csv size={16} />} />
+              <Button
+                label="Download CSV"
+                size="xsmall"
+                icon={<Download size={16} />}
+              />
             </CSVLink>
           </Box>
           <Box
@@ -124,24 +128,30 @@ export default function Results(props: {
                 columns={[
                   {
                     property: 'name',
-                    header: <Text size="small">Name</Text>,
+                    header: (
+                      <Box>
+                        <Text size="small">Name</Text>
+                      </Box>
+                    ),
                     size: size === 'small' ? 'small' : 'medium',
                     primary: true,
-                    search: true,
-                    pin: true,
                     align: 'start',
                     render: ({ name }) => <Text size="small">{name}</Text>,
                     footer: (
                       <Text size="small" color="dark-2">
-                        {items?.length} matching items found in {collectionName}
+                        {items?.length} matching items found in{' '}
+                        <b>&quot;{collectionName}&quot;</b>
                       </Text>
                     )
                   },
                   {
                     property: 'description',
                     size: size === 'small' ? 'small' : 'medium',
-                    header: <Text size="small">Description</Text>,
-                    search: true,
+                    header: (
+                      <Box background="white">
+                        <Text size="small">Description</Text>
+                      </Box>
+                    ),
                     render: ({ description }) => (
                       <Text size="small">{description}</Text>
                     )

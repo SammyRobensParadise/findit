@@ -9,11 +9,11 @@ import {
 } from '@/types'
 import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
-import { Box, Button, Card, Tag, Text } from 'grommet'
+import { Box, Button, Card, ResponsiveContext, Tag, Text } from 'grommet'
 import { serverRenderItem } from '@/functions/server-render-item'
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { Csv, Edit, Printer, TrashCan } from '@carbon/icons-react'
+import { Download, Edit, Printer, TrashCan } from '@carbon/icons-react'
 import { CSVLink } from 'react-csv'
 import Link from 'next/link'
 import { useItems } from '@/hooks/items'
@@ -27,6 +27,7 @@ export default function Results(props: {
 
   const { remove } = useItems({ userId: user.id })
   const router = useRouter()
+  const size = useContext(ResponsiveContext)
 
   const componentRef = useRef(null)
   const handlePrint = useReactToPrint({
@@ -81,19 +82,38 @@ export default function Results(props: {
       </Head>
       <Page user={user}>
         <Box gap="medium" flex="grow" pad="small">
-          <Box direction="row" gap="medium" pad="small" animation="fadeIn">
+          <Box
+            direction={size === 'large' ? 'row' : 'column'}
+            gap={size === 'large' ? 'medium' : 'small'}
+            pad="small"
+            animation="fadeIn"
+          >
             <Button
+              size="xsmall"
               label="Print"
               onClick={handlePrint}
               icon={<Printer size={16} />}
             />
             <CSVLink data={[downloadableItem]} filename={`item-${item.id}.csv`}>
-              <Button label="Download CSV" icon={<Csv size={16} />} />
+              <Box>
+                <Button
+                  size="xsmall"
+                  label="Download CSV"
+                  icon={<Download size={16} />}
+                />
+              </Box>
             </CSVLink>
             <Link href={`/item/${item.id}/edit`} passHref>
-              <Button label="Edit" icon={<Edit size={16} />}></Button>
+              <Box>
+                <Button
+                  size="xsmall"
+                  label="Edit"
+                  icon={<Edit size={16} />}
+                ></Button>
+              </Box>
             </Link>
             <Button
+              size="xsmall"
               color="status-critical"
               label="Delete Item"
               icon={<TrashCan size={16} />}
