@@ -34,6 +34,7 @@ export default function Navbar({ user }: { user: UserWithCollections }) {
       <Box>
         <Link href="/item/new">
           <Button
+            color="neutral-2"
             label="Create Item"
             size="small"
             icon={<DocumentAdd size={16} />}

@@ -50,6 +50,7 @@ export default function Collections(props: { user: UserWithCollections }) {
         <Box gap="medium">
           <Text>Collections {`(${user.collections.length})`}</Text>
           <Anchor
+            color="neutral-2"
             href="/collections/new"
             label="New Collection"
             icon={<Add size={16} />}
@@ -59,7 +60,10 @@ export default function Collections(props: { user: UserWithCollections }) {
               {user.collections.map((collection, index) => (
                 <Card key={index} border animation="zoomIn">
                   <CardHeader pad="small">
-                    <Anchor href={`/collections/${collection.id}`}>
+                    <Anchor
+                      color="neutral-2"
+                      href={`/collections/${collection.id}`}
+                    >
                       {collection.name}
                     </Anchor>
                     <Menu

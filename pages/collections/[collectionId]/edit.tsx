@@ -105,6 +105,7 @@ export default function EditCollection(props: { user: UserWithCollections }) {
                 </FormField>
                 <Box direction="row" gap="small">
                   <Button
+                    color="neutral-2"
                     label="Cancel"
                     href={`/collections/${collectionId}`}
                   />

@@ -303,14 +303,14 @@ export default function Collections(props: { user: UserWithCollections }) {
                 <CardFooter pad="small">
                   <Link href={`/search?collectionId=${collection.id}`} passHref>
                     <Button
-                      label="Search Collection"
+                      label="Search"
                       icon={<Search size={16} />}
                       plain
                       color="neutral-2"
                     />
                   </Link>
                   <Button
-                    label="Share Collection"
+                    label="Share"
                     icon={<Share size={16} />}
                     plain
                     color="neutral-2"

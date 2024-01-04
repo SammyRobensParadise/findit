@@ -11,11 +11,10 @@ import serverRenderUser from '@/functions/server-render-user'
 import Page from '@/components/Page'
 import { Box, Text, Button, Form, FormField, Select, Spinner } from 'grommet'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { Collection } from '@prisma/client'
 import { useCollections } from '@/hooks/collections'
 import { CSVLink } from 'react-csv'
-import { Csv } from '@carbon/icons-react'
+import { Download } from '@carbon/icons-react'
 
 export default function NewItem(props: { user: UserWithCollections }) {
   const { user } = props
@@ -66,8 +65,9 @@ export default function NewItem(props: { user: UserWithCollections }) {
                 />
               </FormField>
 
-              <Box direction="row" gap="small" alignContent="stretch">
+              <Box gap="small" alignContent="stretch">
                 <Button
+                  color="neutral-2"
                   primary
                   type="submit"
                   label="Export Collection"
@@ -88,11 +88,11 @@ export default function NewItem(props: { user: UserWithCollections }) {
                   filename={`collection-${collection?.name}.csv`}
                 >
                   <Button
-                    label={`Download Collection "${currentCollection?.name}" as CSV`}
-                    icon={<Csv size={16} />}
+                    label={`Download "${currentCollection?.name}" CSV`}
+                    icon={<Download size={16} />}
                     fill
                     primary
-                    color="graph-1"
+                    color="status-ok"
                   />
                 </CSVLink>
               )}

@@ -79,6 +79,7 @@ export default function SearchForm({
     <Form onReset={resetForm} onSubmit={Submit}>
       <FormField name="collection" label="Collection" htmlFor="collection">
         <Select
+          color="neutral-2"
           placeholder="Select collection..."
           options={user.collections}
           name="collection"
@@ -143,8 +144,8 @@ export default function SearchForm({
           </FormField>
         )}
         <Box direction="row" gap="medium" animation="fadeIn">
-          <Button type="reset" label="Reset Form" />
-          <Button type="submit" primary label="Search" />
+          <Button type="reset" label="Reset Form" color="neutral-2" />
+          <Button type="submit" primary label="Search" color="neutral-2" />
         </Box>
       </Box>
     </Form>
