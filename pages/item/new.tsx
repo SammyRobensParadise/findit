@@ -76,6 +76,7 @@ export default function NewItem(props: { user: UserWithCollections }) {
   }
 
   async function handleNewKeyword() {
+    console.log(keywordSearch)
     if (collection?.id) {
       await createKeyword({
         name: keywordSearch,
@@ -179,20 +180,40 @@ export default function NewItem(props: { user: UserWithCollections }) {
               ) : (
                 <>
                   {!!collection && (
-                    <Box pad="small">
-                      <Text color="dark-6">No keywords in this collection</Text>
-                      <Box direction="row" gap="small" flex="shrink">
+                    <Box
+                      pad="medium"
+                      gap="xsmall"
+                      border
+                      round="xsmall"
+                      margin={{ bottom: 'small' }}
+                    >
+                      <Text color="dark-6">
+                        This collection does not have any keywords yet
+                      </Text>
+                      <Box direction="row" flex="shrink">
                         <TextInput
-                          width="small"
-                          placeholder="Create Keyword"
+                          style={{
+                            borderTopRightRadius: 0,
+                            borderBottomRightRadius: 0
+                          }}
+                          placeholder="New Keyword..."
                           onChange={({ target: { value } }) =>
                             setKeywordSearch(value)
                           }
                         />
                         <Button
+                          style={{
+                            borderTopLeftRadius: 0,
+                            borderBottomLeftRadius: 0,
+                            borderTopRightRadius: '4px',
+                            borderBottomRightRadius: '4px'
+                          }}
+                          size="xsmall"
                           onClick={handleNewKeyword}
-                          label="Add New Keyword"
+                          label="Add"
+                          primary
                           icon={<Add size={16} />}
+                          disabled={!keywordSearch.length}
                         />
                       </Box>
                     </Box>

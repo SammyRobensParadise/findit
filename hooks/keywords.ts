@@ -43,7 +43,6 @@ export function useKeywords({
       })
     })
     const response = await res.json()
-
     if (response.message === 'success') {
       toast.success(`Keyword ${name} created!`)
       mutate(`/api/collections/${collectionId}/keywords?userId=${userId}`)
