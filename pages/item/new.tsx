@@ -95,9 +95,8 @@ export default function NewItem(props: { user: UserWithCollections }) {
       </Head>
       <Page user={user}>
         <Box gap="medium">
-          <Text>New Item</Text>
-          <Box>
-            {' '}
+          <Text weight="bolder">New Item</Text>
+          <Box border round="small" pad="small">
             <Form onSubmit={handleCreate}>
               <FormField name="itemName" htmlFor="itemName" label="Item Name">
                 <TextInput
