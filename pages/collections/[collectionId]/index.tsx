@@ -157,12 +157,15 @@ export default function Collections(props: { user: UserWithCollections }) {
     async function fetchUsers() {
       if (typeof collectionId === 'string') {
         const usrs = await users({ collectionId })
-        setUsers(() => [...usrs.users])
+        if (!collectionUsers.length) {
+          setUsers(() => [...usrs.users])
+        }
       }
     }
     fetchUsers()
-  }, [collectionId, users])
+  }, [collectionId, collectionUsers, users])
 
+  console.log(collection)
   return (
     <>
       <Head>
@@ -220,12 +223,11 @@ export default function Collections(props: { user: UserWithCollections }) {
           </Layer>
         )}
         <Box gap="medium">
-          <Text>Collection: {collection?.name}</Text>
           <Box>
             {collection && (
               <Card border animation="zoomIn">
                 <CardHeader pad="small">
-                  <Text>{collection.name}</Text>
+                  <Text weight="bolder">{collection.name}</Text>
                   <Menu
                     dropProps={{ align: { top: 'bottom', right: 'right' } }}
                     icon={<OverflowMenuVertical size={16} />}
@@ -236,7 +238,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                             content={<Text size="small">Edit Collection</Text>}
                           >
                             <Box pad={{ left: 'small' }}>
-                              <Text>Edit</Text>
+                              <Text size="small">Edit</Text>
                             </Box>
                           </Tip>
                         ),
@@ -254,7 +256,7 @@ export default function Collections(props: { user: UserWithCollections }) {
                             }
                           >
                             <Box pad={{ left: 'small' }}>
-                              <Text>Delete</Text>
+                              <Text size="small">Delete</Text>
                             </Box>
                           </Tip>
                         ),
@@ -271,24 +273,33 @@ export default function Collections(props: { user: UserWithCollections }) {
                     ]}
                   />
                 </CardHeader>
-                <CardBody gap="small" pad="small">
+                <CardBody gap="small" pad="small" border={{ side: 'bottom' }}>
+                  <Text size="small" weight="bolder">
+                    Description:
+                  </Text>
+
                   <Text size="small">{collection.description}</Text>
-                  <GrommetTag
-                    name="Items"
-                    value={`${collection._count.items}`}
-                    size="small"
-                  />
-                  <Text size="small">Users:</Text>
+                  <Text size="small" weight="bolder">
+                    Items:
+                  </Text>
+                  <Text size="small">{collection._count.items}</Text>
+                  <Text size="small" weight="bolder">
+                    Unique Identifier:
+                  </Text>
+                  <Text size="small">{collection.id}</Text>
+                  <Text size="small" weight="bolder">
+                    Users:
+                  </Text>
                   <Box gap="small" direction="row-responsive" wrap>
                     {!!collectionUsers &&
                       collectionUsers.map((user) => (
                         <Box
+                          background="light-2"
                           key={user.email}
-                          round="medium"
+                          round="small"
                           border
                           pad="small"
                           style={{ width: 'fit-content' }}
-                          margin="8px"
                         >
                           <Text size="small" id={user.id}>
                             <b>

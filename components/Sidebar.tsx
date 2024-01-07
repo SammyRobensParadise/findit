@@ -9,7 +9,7 @@ export default function Sidebar() {
       color="white"
       border={{ side: 'right', color: 'dark-6' }}
     >
-      <Nav direction="column" pad="medium" background="neutral-2" fill>
+      <Nav direction="column" pad="medium" background="dark-1" fill>
         <Link href="/search" passHref>
           <Box>
             <Anchor
