@@ -42,7 +42,9 @@ export default function Results(props: {
   const router = useRouter()
   const size = useContext(ResponsiveContext)
 
-  if (!items.length) {
+  console.log(items)
+
+  if (!items.length || (items.length && items[0] === null)) {
     return (
       <>
         <Head>
@@ -61,8 +63,9 @@ export default function Results(props: {
             </Text>
             <Text>
               No items matched the search criteria. The items you are looking
-              for do not exist or have been deleted. If you think this is an
-              error,{' '}
+              for do not exist or have been deleted. This is most common if a
+              keyword search has been perforced but all items assoicated with
+              the keyword have been deleted. If you think this is an error,{' '}
               <Anchor
                 href={`mailto:srobensparadise@gmail.com?subject=Findit. Item Not Found&body=Item Not found at URL: ${window.location.href}`}
               >
@@ -111,7 +114,7 @@ export default function Results(props: {
             overflow="auto"
             animation="fadeIn"
           >
-            {items.length && (
+            {items?.length && (
               <DataTable
                 a11yTitle="Items Table"
                 size="medium"

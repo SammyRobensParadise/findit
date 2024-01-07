@@ -15,7 +15,8 @@ import {
   FormExtendedEvent,
   SelectMultiple,
   Tag,
-  TextArea
+  TextArea,
+  Anchor
 } from 'grommet'
 import { useEffect, useState } from 'react'
 import { Add } from '@carbon/icons-react'
@@ -76,7 +77,6 @@ export default function NewItem(props: { user: UserWithCollections }) {
   }
 
   async function handleNewKeyword() {
-    console.log(keywordSearch)
     if (collection?.id) {
       await createKeyword({
         name: keywordSearch,
@@ -169,11 +169,14 @@ export default function NewItem(props: { user: UserWithCollections }) {
                       setKeywordSearch(text)
                     }}
                     emptySearchMessage={
-                      <Button
-                        label="Add New Keyword"
-                        icon={<Add size={16} />}
-                        onClick={handleNewKeyword}
-                      ></Button>
+                      <Box gap="small">
+                        <Text>No Matches Found</Text>
+                        <Button
+                          label="Add Keyword"
+                          icon={<Add size={16} />}
+                          onClick={handleNewKeyword}
+                        ></Button>
+                      </Box>
                     }
                   />
                 </FormField>

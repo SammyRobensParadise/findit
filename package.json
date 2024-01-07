@@ -20,7 +20,7 @@
     "dotenv": "^16.0.3",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
-    "grommet": "^2.32.0",
+    "grommet": "^2.34.2",
     "jotai": "^2.0.4",
     "next": "13.3.1",
     "node-fetch": "^3.3.1",

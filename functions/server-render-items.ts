@@ -28,6 +28,7 @@ export default async function serverRenderItems(query: ItemServerQuery) {
         }
       }
     })
+
     Items = [
       ...keywordItems.map((keywordWithItem) =>
         JSON.parse(JSON.stringify(keywordWithItem.Item))
