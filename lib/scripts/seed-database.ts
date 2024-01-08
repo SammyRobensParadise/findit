@@ -101,8 +101,6 @@ async function createCollections({
         id: userId
       }
     })
-
-    console.log(user.id)
     const collection = await prisma.collection.create({
       data: {
         name: 'My Collection',
@@ -138,6 +136,7 @@ async function createCollections({
     await Promise.all(
       mappedKeywords.map(async (keyword) => {
         const ref = refTable.find((ref) => ref.keywordId === keyword.id)
+
         if (ref) {
           try {
             await prisma.keyword.update({

@@ -27,7 +27,7 @@ model Item {
 model Keyword {
   id           Int         @id @default(autoincrement())
   name         String      @db.Text
-  Item         Item?       @relation(fields: [itemId], references: [id])
+  Item         Item[]
   itemId       Int?
   Collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   collectionId String?
