@@ -33,6 +33,9 @@ export default async function serverRenderItems(query: ItemServerQuery) {
       })
     }
   }
+  Items = [
+    ...Items.map((keywordItem) => JSON.parse(JSON.stringify(keywordItem)))
+  ]
   if (text?.length) {
     // if postgres change text to search string
     const searchString = text.replace(' ', ' | ')
@@ -54,7 +57,6 @@ export default async function serverRenderItems(query: ItemServerQuery) {
       ...Items.map((keywordItem) => JSON.parse(JSON.stringify(keywordItem))),
       ...textSearchItems.map((textItem) => JSON.parse(JSON.stringify(textItem)))
     ]
-    debugger
   }
   return {
     props: { items: Items as ItemWithCollectionAndUserAndKeywords[] }

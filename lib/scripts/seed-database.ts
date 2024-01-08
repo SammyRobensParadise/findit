@@ -103,8 +103,9 @@ async function createCollections({
     })
     const collection = await prisma.collection.create({
       data: {
-        name: 'My Collection',
-        description: 'My first collection',
+        name: "Jonathan's Collection",
+        description:
+          'Findit collection containing items and keywords migrated from the legacy MS Access database.',
         users: {
           connect: [
             {
