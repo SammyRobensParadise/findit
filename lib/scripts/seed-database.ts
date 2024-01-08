@@ -101,12 +101,11 @@ async function createCollections({
         id: userId
       }
     })
-
-    console.log(user.id)
     const collection = await prisma.collection.create({
       data: {
-        name: 'My Collection',
-        description: 'My first collection',
+        name: "Jonathan's Collection",
+        description:
+          'Findit collection containing items and keywords migrated from the legacy MS Access database.',
         users: {
           connect: [
             {
@@ -138,6 +137,7 @@ async function createCollections({
     await Promise.all(
       mappedKeywords.map(async (keyword) => {
         const ref = refTable.find((ref) => ref.keywordId === keyword.id)
+
         if (ref) {
           try {
             await prisma.keyword.update({

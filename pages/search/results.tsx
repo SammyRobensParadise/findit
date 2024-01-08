@@ -77,13 +77,13 @@ export default function Results(props: {
       </>
     )
   }
-  const printableItems = items.map((item) => ({
+  const printableItems = items?.map((item) => ({
     name: item?.name,
     description: item?.description,
     id: item?.id,
-    keywords: item?.keywords.map((k) => k.name).toString(),
-    collection: item?.Collection.name,
-    collectionId: item?.Collection.id
+    keywords: item?.keywords?.map((k) => k.name).toString(),
+    collection: item?.Collection?.name,
+    collectionId: item?.Collection?.id
   }))
   return (
     <>

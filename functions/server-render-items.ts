@@ -21,20 +21,21 @@ export default async function serverRenderItems(query: ItemServerQuery) {
   let Items: (Item | null)[] = []
   if (keywordIds) {
     const keywordItems = await prisma.keyword.findMany({
-      where: { id: { in: keywordIds }, collectionId: query.collectionId },
-      include: {
-        Item: {
-          include: { keywords: true, Collection: true }
-        }
-      }
+      where: { id: { in: keywordIds }, collectionId: query.collectionId }
     })
-
-    Items = [
-      ...keywordItems.map((keywordWithItem) =>
-        JSON.parse(JSON.stringify(keywordWithItem.Item))
-      )
-    ]
+    if (keywordItems.length) {
+      Items = await prisma.item.findMany({
+        where: {
+          id: { in: keywordItems.map((keyword) => keyword.itemId) as number[] }
+        },
+        include: { Collection: true, keywords: true },
+        orderBy: { name: 'asc' }
+      })
+    }
   }
+  Items = [
+    ...Items.map((keywordItem) => JSON.parse(JSON.stringify(keywordItem)))
+  ]
   if (text?.length) {
     // if postgres change text to search string
     const searchString = text.replace(' ', ' | ')
@@ -53,7 +54,7 @@ export default async function serverRenderItems(query: ItemServerQuery) {
       }
     })
     Items = [
-      ...Items,
+      ...Items.map((keywordItem) => JSON.parse(JSON.stringify(keywordItem))),
       ...textSearchItems.map((textItem) => JSON.parse(JSON.stringify(textItem)))
     ]
   }
