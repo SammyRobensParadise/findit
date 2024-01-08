@@ -46,12 +46,34 @@ export default async function handler(
       })
       Promise.all(
         data.keywords.map(async (keyword) => {
+          const kw = await prisma.keyword.findUnique({
+            where: {
+              id: keyword.id
+            }
+          })
+          let newKeyword = keyword
+          if (!kw) {
+            newKeyword = await prisma.keyword.create({
+              data: {
+                ...keyword
+              }
+            })
+          } else {
+            newKeyword = await prisma.keyword.update({
+              where: {
+                id: kw.id
+              },
+              data: {
+                itemId: initItem.id
+              }
+            })
+          }
           await prisma.item.update({
             where: { id: initItem.id },
             data: {
               keywords: {
                 connect: {
-                  id: parseInt(`${keyword.id}`)
+                  id: newKeyword.id
                 }
               }
             }
