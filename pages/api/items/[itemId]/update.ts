@@ -60,6 +60,14 @@ export default async function handler(
               }
             }
           })
+          await prisma.keyword.update({
+            where: {
+              id: keyword.id
+            },
+            data: {
+              itemId: parseInt(data.itemId)
+            }
+          })
         })
       )
 
