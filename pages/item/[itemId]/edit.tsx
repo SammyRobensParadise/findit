@@ -52,6 +52,7 @@ export default function EditItem(props: {
     userId: user.id,
     collectionId: item.collectionId as string
   })
+  console.log(item)
   const [keywordsValues, setKeywordsValues] = useState<Keyword[]>(
     item.keywords.map((keyword) => ({
       name: keyword.name,
