@@ -42,8 +42,6 @@ export default function Results(props: {
   const router = useRouter()
   const size = useContext(ResponsiveContext)
 
-  console.log(items)
-
   if (!items.length || (items.length && items[0] === null)) {
     return (
       <>
