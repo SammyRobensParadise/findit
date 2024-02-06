@@ -165,7 +165,6 @@ export default function Collections(props: { user: UserWithCollections }) {
     fetchUsers()
   }, [collectionId, collectionUsers, users])
 
-  console.log(collection)
   return (
     <>
       <Head>
